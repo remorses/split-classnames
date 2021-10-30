@@ -247,7 +247,6 @@ export function transformer(
             // classnames arguments too long
             ast.find(
                 j.JSXAttribute,
-
                 (attr: JSXAttribute) =>
                     attr.name.name === classAttrName &&
                     attr?.value?.type === 'JSXExpressionContainer' &&
