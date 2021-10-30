@@ -85,7 +85,7 @@ export function transformer(
             options.classnamesImport ||
             CLASSNAMES_IDENTIFIER_NAME
 
-        const lastLibImport: any = ((ast) => {
+        const lastLibImport: any = (() => {
             let firstImport
             let lastLibImport
             const importDeclarations = ast.find(j.ImportDeclaration)
@@ -100,7 +100,7 @@ export function transformer(
                 }
             })
             return lastLibImport || firstImport
-        })(ast)
+        })()
 
         let shouldInsertCXImport = false
 
@@ -231,9 +231,15 @@ export function transformer(
         }
 
         if (!existingClassNamesImportIdentifer && shouldInsertCXImport) {
-            lastLibImport.insertAfter(
-                createImportDeclaration(classNamesImportName, 'classnames'),
-            )
+            if (lastLibImport) {
+                lastLibImport.insertAfter(
+                    createImportDeclaration(classNamesImportName, 'classnames'),
+                )
+            } else {
+                ast.get().node.program.body.unshift(
+                    createImportDeclaration(classNamesImportName, 'classnames'),
+                )
+            }
         }
         return ast.toSource(options as any)
     } catch (e) {
