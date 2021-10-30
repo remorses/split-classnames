@@ -12,23 +12,51 @@ import {
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
+function tailwindSort(a: string, b: string) {
+    // a before b
+    if (b.includes(':')) {
+        return -1
+    }
+    // a after b
+    if (a.includes(':')) {
+        return 1
+    }
+    // a before b
+    if (b.includes('[')) {
+        return -1
+    }
+    // a after b
+    if (a.includes('[')) {
+        return 1
+    }
+    // a must be equal to b
+    return 0
+}
+
 // TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
 // groups are: defaults, md, lg, .etc, :dark, :hover, :focus, :active, :disabled
-function splitClassNames(className: string, maxClassLength: number = 60) {
+export function splitClassNames(
+    className: string,
+    maxClassLength: number = 60,
+) {
     className = className.trim()
     if (className.length <= maxClassLength) {
         return [className]
     }
-    const classes = className.split(/\s+/).filter((name) => name.length > 0)
+    const classes = className
+        .split(/\s+/)
+        .filter((name) => name.length > 0)
+        .sort(tailwindSort)
+
     const classGroups: string[] = []
     let currentSize = 0
     let lastAddedIndex = 0
 
     for (let i = 0; i < classes.length; i += 1) {
         currentSize += classes[i].length
-        if (currentSize > maxClassLength || i === classes.length - 1) {
-            classGroups.push(classes.slice(lastAddedIndex, i).join(' '))
-            lastAddedIndex = i
+        if (currentSize >= maxClassLength || i === classes.length - 1) {
+            classGroups.push(classes.slice(lastAddedIndex, i + 1).join(' '))
+            lastAddedIndex = i + 1
             currentSize = 0
         }
     }
