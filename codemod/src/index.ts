@@ -29,7 +29,7 @@ function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
 // user can also give a priority implementation to use
 // you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
 // TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
-// TODO
+// TODO let user choose if always add the clsx call instead of leaving short literals classes
 
 export function transformer(
     fileInfo,
@@ -146,11 +146,9 @@ export function transformer(
                     (s) => j.stringLiteral(s),
                 )
                 j(literal).replaceWith(
-                    j.jsxExpressionContainer(
-                        j.callExpression(
-                            j.identifier(classNamesImportName),
-                            cxArguments,
-                        ),
+                    j.callExpression(
+                        j.identifier(classNamesImportName),
+                        cxArguments,
                     ),
                 )
             })
@@ -212,7 +210,6 @@ export function transformer(
                 shouldInsertCXImport = true
                 const callExpression = j(path).find(j.CallExpression).get()
                 const newArgs: any[] = []
-                console.log({ callExpression })
                 callExpression.value.arguments.forEach((arg) => {
                     if (arg.type === 'StringLiteral') {
                         const newCxArguments = splitClassNames(arg.value).map(
@@ -225,11 +222,9 @@ export function transformer(
                 })
 
                 j(callExpression).replaceWith(
-                    j.jsxExpressionContainer(
-                        j.callExpression(
-                            j.identifier(classNamesImportName),
-                            newArgs,
-                        ),
+                    j.callExpression(
+                        j.identifier(classNamesImportName),
+                        newArgs,
                     ),
                 )
             })

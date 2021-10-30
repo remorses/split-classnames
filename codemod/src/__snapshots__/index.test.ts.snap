@@ -1,24 +1,48 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`simple.jsx: simple.jsx 1`] = `
+exports[`alreadyRun.jsx: alreadyRun.jsx 1`] = `
 "import React from 'react'
 
-import cx from \\"classnames\\";
+import clsx from \\"classnames\\";
 
 export default function Component() {
     return (
         <div>
             <p className='ciao'></p>
-            <p className={{cx(\\"a b c d e\\", \\"f g\\")}}></p>
+            <p className={clsx(\\"a b c d e\\", \\"f g\\")}></p>
             <p
-                className={{cx(\\"a b c d e\\", \\"f g\\", \\"another one\\", true && 'another')}}
+                className={clsx(\\"a b c d e\\", \\"f g\\", \\"another one\\", true && 'another')}
             ></p>
-            <p className={{cx(\\"ciao sono un template literal\\", x)}}></p>
-            <p className={{cx(cond ? 'literal-class' : '')}}></p>
-            <p className={{cx(\\"x\\", cond ? 'literal-class' : '', \\"z\\")}}></p>
+            <p className={clsx(\\"ciao sono un template literal\\", x)}></p>
+            <p className={clsx(cond ? 'literal-class' : '')}></p>
+            <p className={clsx(\\"x\\", cond ? 'literal-class' : '', \\"z\\")}></p>
 
-            <p className={{cx(\\"ciao sono un literal\\")}}></p>
-            <p className={{cx(\\"a b c d e\\", \\"f g\\")}}></p>
+            <p className={clsx(\\"ciao sono un literal\\")}></p>
+            <p className={clsx(\\"a b c d e\\", \\"f g\\")}></p>
+        </div>
+    );
+}"
+`;
+
+exports[`simple.jsx: simple.jsx 1`] = `
+"import React from 'react'
+
+import clsx from \\"classnames\\";
+
+export default function Component() {
+    return (
+        <div>
+            <p className='ciao'></p>
+            <p className={clsx(\\"a b c d e\\", \\"f g\\")}></p>
+            <p
+                className={clsx(\\"a b c d e\\", \\"f g\\", \\"another one\\", true && 'another')}
+            ></p>
+            <p className={clsx(\\"ciao sono un template literal\\", x)}></p>
+            <p className={clsx(cond ? 'literal-class' : '')}></p>
+            <p className={clsx(\\"x\\", cond ? 'literal-class' : '', \\"z\\")}></p>
+
+            <p className={clsx(\\"ciao sono un literal\\")}></p>
+            <p className={clsx(\\"a b c d e\\", \\"f g\\")}></p>
         </div>
     );
 }"
