@@ -1,3 +1,5 @@
+import classnames from 'classnames'
+
 function Component() {
     return (
         <Fragment>

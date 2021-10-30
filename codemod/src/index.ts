@@ -8,6 +8,7 @@ import {
     JSCodeshift,
     Options,
     JSXAttribute,
+    ImportDeclaration,
 } from 'jscodeshift'
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
@@ -81,6 +82,12 @@ const possibleClassNamesImportNames = new Set([
     'classcat',
 ])
 
+const possibleClassNamesImportSources = new Set([
+    'classnames',
+    'clsx',
+    'classcat',
+])
+
 const CLASSNAMES_IMPORT_SOURCE = 'classnames'
 
 export function transformer(
@@ -103,12 +110,14 @@ export function transformer(
         }
 
         const getClassNamesIdentifierName = (ast) => {
-            const importDeclarations = ast.find(j.ImportDeclaration, {
-                type: 'ImportDeclaration',
-                source: {
-                    value: CLASSNAMES_IMPORT_SOURCE,
-                },
-            })
+            const importDeclarations = ast.find(
+                j.ImportDeclaration,
+                (node: ImportDeclaration) =>
+                    node.type === 'ImportDeclaration' &&
+                    possibleClassNamesImportSources.has(
+                        node.source?.value as string,
+                    ),
+            )
 
             if (importDeclarations.length === 1) {
                 const importDeclaration = importDeclarations.get()
