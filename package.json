@@ -1,0 +1,26 @@
+{
+    "name": "root",
+    "private": true,
+    "scripts": {
+        "test": "NODE_ENV=test jest",
+        "watch": "ultra -r watch",
+        "build": "ultra --build -r build",
+        "release": "yarn build && changeset publish"
+    },
+    "workspaces": [
+        "package"
+    ],
+    "devDependencies": {
+        "@changesets/cli": "^2.17.0",
+        "@jest/types": "^27.2.5",
+        "@sucrase/jest-plugin": "^2.2.0",
+        "@types/jest": "^27.0.2",
+        "jest": "^27.3.1",
+        "prettier": "^2.4.1",
+        "typescript": "^4.4.4",
+        "ultra-runner": "^3.10.5"
+    },
+    
+    "author": "remorses <beats.by.morse@gmail.com>",
+    "license": ""
+}
