@@ -50,3 +50,16 @@ test('splitClassNames makes small groups', () => {
     expect(res.length).toBe(N)
     expect(res.join(' ').length).toBe(expectedLen)
 })
+test('splitClassNames sorts classes for tailwind', () => {
+    const cls =
+        'w-1 w-[700px] hover:h-[800px] text-gray-800 hover:text-gray-800 dark:w-5 h-xl absolute relative disabled:w-8 text-white text-black'
+    // console.log(cls)
+    const res = splitClassNames(cls, 60)
+
+    expect(JSON.stringify(res)).toBe(
+        JSON.stringify([
+            'w-1 text-gray-800 h-xl absolute relative text-white text-black w-[700px]',
+            'disabled:w-8 dark:w-5 hover:text-gray-800 hover:h-[800px]',
+        ]),
+    )
+})
