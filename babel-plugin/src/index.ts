@@ -20,7 +20,7 @@ const getClassNames = (string) => {
 }
 
 const isFalsyNodeValue = (node) =>
-    (node.type === 'Literal' && !node.value) ||
+    (node.type === 'StringLiteral' && !node.value) ||
     node.type === 'NullLiteral' ||
     (node.type === 'Identifier' && node.name === 'undefined')
 
@@ -87,6 +87,18 @@ const _getClassNamesIdentifierName = (j) => (ast) => {
     return null
 }
 
+function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
+    const classes = className.split(/\s+/).filter((name) => name.length > 0)
+    if (classes.length <= maxClassesPerGroup) {
+        return [className.trim()]
+    }
+    const classGroups: string[] = []
+    for (let i = 0; i < classes.length; i += maxClassesPerGroup) {
+        classGroups.push(classes.slice(i, i + maxClassesPerGroup).join(' '))
+    }
+    return classGroups
+}
+
 export function transformer(
     fileInfo,
     api,
@@ -114,7 +126,7 @@ export function transformer(
         const transformFalsyConditionalExp = options.falsyConditionalExp
         const classAttrName = [
             'className',
-            ...(options.classAttrName || '').split(','),
+            // ...(options.classAttrName || '').split(','),
         ]
 
         const existingClassNamesImportIdentifer =
@@ -128,213 +140,131 @@ export function transformer(
         let shouldInsertCXImport = false
 
         classAttrName.forEach((classAttrName) => {
-            const classNameAttrs = ast.find(
+            // simple literals or literals inside expressions
+            ast.find(
                 j.JSXAttribute,
                 (attr: JSXAttribute) =>
                     attr.name.name === classAttrName &&
-                    attr?.value?.type === 'Literal',
-            )
+                    attr?.value?.type === 'StringLiteral',
+            ).forEach((path) => {
+                const literal = j(path).find(j.StringLiteral).get()
 
-            classNameAttrs.forEach((path) => {
-                const literal = j(path).find(j.Literal).get()
-                const cxArguments = String(literal.value)
-                    .split(/\s+/)
-                    .map((s) => j.literal(s))
-                j(literal).replaceWith(
-                    createCxCallExpression(cxArguments, classNamesImportName),
+                const cxArguments = splitClassNames(literal.value?.value).map(
+                    (s) => j.stringLiteral(s),
                 )
-                console.log({ literal: literal.toSource() })
+                // don't add the classnames if className attr is short enough
+                if (cxArguments.length <= 1) {
+                    return
+                }
+                shouldInsertCXImport = true
+                j(literal).replaceWith(
+                    j.jsxExpressionContainer(
+                        j.callExpression(
+                            j.identifier(classNamesImportName),
+                            cxArguments,
+                        ),
+                    ),
+                )
             })
-            // Perform in place replace
-            classNameAttrs.forEach((path) => {
+            // string literal inside expressions
+            ast.find(
+                j.JSXAttribute,
+                (attr: JSXAttribute) =>
+                    attr.name.name === classAttrName &&
+                    attr?.value?.type === 'JSXExpressionContainer' &&
+                    attr?.value?.expression?.type === 'StringLiteral',
+            ).forEach((path) => {
+                shouldInsertCXImport = true
+                const literal = j(path).find(j.StringLiteral).get()
+
+                const cxArguments = splitClassNames(literal.value?.value).map(
+                    (s) => j.stringLiteral(s),
+                )
+                j(literal).replaceWith(
+                    j.jsxExpressionContainer(
+                        j.callExpression(
+                            j.identifier(classNamesImportName),
+                            cxArguments,
+                        ),
+                    ),
+                )
+            })
+
+            // template literal
+            ast.find(j.JSXAttribute, {
+                type: 'JSXAttribute',
+                name: {
+                    type: 'JSXIdentifier',
+                    name: classAttrName,
+                },
+                value: {
+                    type: 'JSXExpressionContainer',
+                    expression: {
+                        type: 'TemplateLiteral',
+                    },
+                },
+            }).forEach((path) => {
                 shouldInsertCXImport = true
                 const templateLiteral = j(path).find(j.TemplateLiteral).get()
-                let cxArguments: any[] = []
                 const { quasis, expressions } = templateLiteral.node
+                let cxArguments: any[] = []
                 quasis.forEach((quasi, index) => {
-                    const classNames = getClassNames(quasi.value.raw)
-                    cxArguments.push(...classNames.map(createLiteral))
+                    console.log('raw', quasi.value.raw)
+                    if (quasi.value.raw.trim()) {
+                        const classNames = splitClassNames(quasi.value.raw)
+                        cxArguments.push(...classNames.map(createLiteral))
+                    }
                     if (expressions[index] !== undefined) {
                         cxArguments.push(expressions[index])
                     }
                 })
-
-                let shouldUseCX = cxArguments.length > 1
-
-                if (transformLogicalExp) {
-                    cxArguments = cxArguments.map((arg) => {
-                        if (arg.type === 'LogicalExpression') {
-                            shouldUseCX = true
-                            return createObjectExpression([
-                                [arg.right, arg.left],
-                            ])
-                        }
-                        return arg
-                    })
-                }
-
-                if (transformConditionalExpression) {
-                    cxArguments = cxArguments.map((arg) => {
-                        if (arg.type === 'ConditionalExpression') {
-                            shouldUseCX = true
-
-                            const optionalLogicalExpression = (
-                                previousCondition,
-                                currentCondition,
-                            ) => {
-                                if (previousCondition === null) {
-                                    return currentCondition
-                                }
-                                return j.logicalExpression(
-                                    '&&',
-                                    previousCondition,
-                                    currentCondition,
-                                )
-                            }
-
-                            const transformConditionalExpression = (
-                                expression,
-                                previousCondition = null,
-                            ) => {
-                                const expressionsList: any[] = []
-
-                                const currentCondition =
-                                    optionalLogicalExpression(
-                                        previousCondition,
-                                        expression.test,
-                                    )
-                                const currentNegatedCondition =
-                                    optionalLogicalExpression(
-                                        previousCondition,
-                                        j.unaryExpression('!', expression.test),
-                                    )
-
-                                if (
-                                    expression.consequent.type ===
-                                    'ConditionalExpression'
-                                ) {
-                                    expressionsList.push(
-                                        ...transformConditionalExpression(
-                                            expression.consequent,
-                                            currentCondition,
-                                        ),
-                                    )
-                                } else if (
-                                    !isFalsyNodeValue(expression.consequent)
-                                ) {
-                                    expressionsList.push([
-                                        expression.consequent,
-                                        currentCondition,
-                                    ])
-                                }
-                                if (
-                                    expression.alternate.type ===
-                                    'ConditionalExpression'
-                                ) {
-                                    expressionsList.push(
-                                        ...transformConditionalExpression(
-                                            expression.alternate,
-                                            currentNegatedCondition,
-                                        ),
-                                    )
-                                } else if (
-                                    !isFalsyNodeValue(expression.alternate)
-                                ) {
-                                    expressionsList.push([
-                                        expression.alternate,
-                                        currentNegatedCondition,
-                                    ])
-                                }
-                                return expressionsList
-                            }
-
-                            return createObjectExpression(
-                                transformConditionalExpression(arg),
-                            )
-                        }
-                        return arg
-                    })
-                }
-
-                if (shouldUseCX) {
-                    j(templateLiteral).replaceWith(
-                        createCxCallExpression(
-                            cxArguments,
-                            classNamesImportName,
-                        ),
-                    )
-                    shouldInsertCXImport = true
-                } else {
-                    const className = cxArguments[0]
-                    if (className.type === 'Literal') {
-                        j(templateLiteral)
-                            .closest(j.JSXExpressionContainer)
-                            .replaceWith(className)
-                    } else {
-                        j(templateLiteral).replaceWith(className)
-                    }
-                }
+                j(templateLiteral).replaceWith(
+                    j.callExpression(
+                        j.identifier(classNamesImportName),
+                        cxArguments,
+                    ),
+                )
             })
 
-            if (transformFalsyConditionalExp) {
-                const classNameAttrs = ast.find(j.JSXAttribute, {
-                    type: 'JSXAttribute',
-                    name: {
-                        type: 'JSXIdentifier',
-                        name: classAttrName,
+            // classnames arguments too long
+            ast.find(j.JSXAttribute, {
+                type: 'JSXAttribute',
+                name: {
+                    type: 'JSXIdentifier',
+                    name: classAttrName,
+                },
+                value: {
+                    type: 'JSXExpressionContainer',
+                    expression: {
+                        type: 'CallExpression',
+                        callee: { name: classNamesImportName },
                     },
-                    value: {
-                        type: 'JSXExpressionContainer',
-                        expression: {
-                            type: 'ConditionalExpression',
-                        },
-                    },
-                })
-                classNameAttrs.forEach((path) => {
-                    const conditionalExpression = j(path)
-                        .find(j.ConditionalExpression)
-                        .get()
-                    const conditionalExpressionNode = conditionalExpression.node
-                    if (
-                        isFalsyNodeValue(conditionalExpressionNode.consequent)
-                    ) {
-                        shouldInsertCXImport = true
-                        j(conditionalExpression).replaceWith(
-                            createCxCallExpression(
-                                [
-                                    createObjectExpression([
-                                        [
-                                            conditionalExpressionNode.alternate,
-                                            j.unaryExpression(
-                                                '!',
-                                                conditionalExpressionNode.test,
-                                            ),
-                                        ],
-                                    ]),
-                                ],
-                                classNamesImportName,
-                            ),
+                },
+            }).forEach((path) => {
+                shouldInsertCXImport = true
+                const callExpression = j(path).find(j.CallExpression).get()
+                const newArgs: any[] = []
+                console.log({ callExpression })
+                callExpression.value.arguments.forEach((arg) => {
+                    if (arg.type === 'StringLiteral') {
+                        const newCxArguments = splitClassNames(arg.value).map(
+                            (s) => j.stringLiteral(s),
                         )
+                        newArgs.push(...newCxArguments)
+                    } else {
+                        newArgs.push(arg)
                     }
+                })
 
-                    if (isFalsyNodeValue(conditionalExpressionNode.alternate)) {
-                        shouldInsertCXImport = true
-                        j(conditionalExpression).replaceWith(
-                            createCxCallExpression(
-                                [
-                                    createObjectExpression([
-                                        [
-                                            conditionalExpressionNode.consequent,
-                                            conditionalExpressionNode.test,
-                                        ],
-                                    ]),
-                                ],
-                                classNamesImportName,
-                            ),
-                        )
-                    }
-                })
-            }
+                j(callExpression).replaceWith(
+                    j.jsxExpressionContainer(
+                        j.callExpression(
+                            j.identifier(classNamesImportName),
+                            newArgs,
+                        ),
+                    ),
+                )
+            })
         })
 
         if (!existingClassNamesImportIdentifer && shouldInsertCXImport) {
