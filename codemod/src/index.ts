@@ -12,6 +12,8 @@ import {
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
+// TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
+// groups are: defaults, md, lg, .etc, :dark, :hover, :focus, :active, :disabled
 function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
     const classes = className.split(/\s+/).filter((name) => name.length > 0)
     if (classes.length <= maxClassesPerGroup) {
@@ -28,7 +30,7 @@ function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
 // i can do this because i only change stuff inside className attribute, this is almost always a classnames implementation
 // user can also give a priority implementation to use
 // you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
-// TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
+
 // TODO let user choose if always add the clsx call instead of leaving short literals classes
 
 export function transformer(
