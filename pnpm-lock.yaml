@@ -22,7 +22,7 @@ importers:
       typescript: 4.4.4
       ultra-runner: 3.10.5
 
-  babel-plugin:
+  codemod:
     specifiers:
       '@types/jscodeshift': ^0.11.2
       jscodeshift: ^0.13.0

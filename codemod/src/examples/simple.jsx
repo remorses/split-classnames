@@ -4,9 +4,9 @@ export default function Component() {
     return (
         <div>
             <p className='ciao'></p>
-            <p className={cx('a b c d e f g')}></p>
+            <p className={clsx('a b c d e f g')}></p>
             <p
-                className={cx(
+                className={clsx(
                     'a b c d e f g',
                     'another one',
                     true && 'another',

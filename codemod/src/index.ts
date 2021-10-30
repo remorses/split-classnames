@@ -10,82 +10,7 @@ import {
     JSXAttribute,
 } from 'jscodeshift'
 
-const CLASSNAMES_IDENTIFIER_NAME = 'cx'
-
-const getClassNames = (string) => {
-    return string
-        .trim()
-        .split(/\s/)
-        .filter((name) => name.length > 0)
-}
-
-const isFalsyNodeValue = (node) =>
-    (node.type === 'StringLiteral' && !node.value) ||
-    node.type === 'NullLiteral' ||
-    (node.type === 'Identifier' && node.name === 'undefined')
-
-const _createObjectExpression = (j) => (entries) => {
-    return j.objectExpression(
-        entries.map(([property, value]) =>
-            j.objectProperty.from({
-                key: property,
-                value,
-                computed: true,
-            }),
-        ),
-    )
-}
-
-const _createLiteral = (j) => (className) => {
-    return j.literal(className)
-}
-
-const _createCxCallExpression = (j) => (args, classNamesIdentifier) => {
-    return j.callExpression(j.identifier(classNamesIdentifier), args)
-}
-
-const _createImportDeclaration = (j) => (identifierName, source) => {
-    return j.importDeclaration(
-        [j.importDefaultSpecifier(j.identifier(identifierName))],
-        j.stringLiteral(source),
-    )
-}
-
-const _getLastLibImport = (j) => (ast) => {
-    let firstImport = null
-    let lastLibImport = null
-    const importDeclarations = ast.find(j.ImportDeclaration)
-
-    importDeclarations.forEach((path, i) => {
-        const importSource = path.node.source.value
-        if (i === 0) {
-            firstImport = path
-        }
-        if (importSource.charAt(0) !== '.') {
-            lastLibImport = path
-        }
-    })
-    return lastLibImport || firstImport
-}
-
-const _getClassNamesIdentifierName = (j) => (ast) => {
-    const importDeclarations = ast.find(j.ImportDeclaration, {
-        type: 'ImportDeclaration',
-        source: {
-            value: 'classnames',
-        },
-    })
-
-    if (importDeclarations.length === 1) {
-        const importDeclaration = importDeclarations.get()
-        const defaultImport = j(importDeclaration)
-            .find(j.ImportDefaultSpecifier)
-            .get()
-
-        return defaultImport.node.local.name
-    }
-    return null
-}
+const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
 function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
     const classes = className.split(/\s+/).filter((name) => name.length > 0)
@@ -113,17 +38,35 @@ export function transformer(
     try {
         const filePath = fileInfo.path
         const j: JSCodeshift = api.jscodeshift
-        const createLiteral = _createLiteral(j)
-        const createCxCallExpression = _createCxCallExpression(j)
-        const createImportDeclaration = _createImportDeclaration(j)
-        const createObjectExpression = _createObjectExpression(j)
-        const getClassNamesIdentifierName = _getClassNamesIdentifierName(j)
+
+        function createImportDeclaration(identifierName, source) {
+            return j.importDeclaration(
+                [j.importDefaultSpecifier(j.identifier(identifierName))],
+                j.stringLiteral(source),
+            )
+        }
+
+        const getClassNamesIdentifierName = (ast) => {
+            const importDeclarations = ast.find(j.ImportDeclaration, {
+                type: 'ImportDeclaration',
+                source: {
+                    value: 'classnames',
+                },
+            })
+
+            if (importDeclarations.length === 1) {
+                const importDeclaration = importDeclarations.get()
+                const defaultImport = j(importDeclaration)
+                    .find(j.ImportDefaultSpecifier)
+                    .get()
+
+                return defaultImport.node.local.name
+            }
+            return null
+        }
 
         const ast: Collection = j(fileInfo.source)
 
-        const transformLogicalExp = options.logicalExp
-        const transformConditionalExpression = options.conditionalExp
-        const transformFalsyConditionalExp = options.falsyConditionalExp
         const classAttrName = [
             'className',
             // ...(options.classAttrName || '').split(','),
@@ -136,7 +79,23 @@ export function transformer(
             options.classnamesImport ||
             CLASSNAMES_IDENTIFIER_NAME
 
-        const lastLibImport: any = _getLastLibImport(j)(ast)
+        const lastLibImport: any = ((ast) => {
+            let firstImport
+            let lastLibImport
+            const importDeclarations = ast.find(j.ImportDeclaration)
+
+            importDeclarations.forEach((path, i) => {
+                const importSource = path.node.source.value as string
+                if (i === 0) {
+                    firstImport = path
+                }
+                if (importSource?.charAt(0) !== '.') {
+                    lastLibImport = path
+                }
+            })
+            return lastLibImport || firstImport
+        })(ast)
+
         let shouldInsertCXImport = false
 
         classAttrName.forEach((classAttrName) => {
@@ -209,10 +168,13 @@ export function transformer(
                 const { quasis, expressions } = templateLiteral.node
                 let cxArguments: any[] = []
                 quasis.forEach((quasi, index) => {
-                    console.log('raw', quasi.value.raw)
                     if (quasi.value.raw.trim()) {
                         const classNames = splitClassNames(quasi.value.raw)
-                        cxArguments.push(...classNames.map(createLiteral))
+                        cxArguments.push(
+                            ...classNames.map((className) =>
+                                j.literal(className),
+                            ),
+                        )
                     }
                     if (expressions[index] !== undefined) {
                         cxArguments.push(expressions[index])
@@ -274,7 +236,7 @@ export function transformer(
         }
         return ast.toSource(options as any)
     } catch (e) {
-        console.error(e)
+        // console.error(e)
         throw e
     }
 }
