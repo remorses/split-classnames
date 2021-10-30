@@ -34,7 +34,6 @@ function tailwindSort(a: string, b: string) {
     return 0
 }
 
-
 export function splitClassNames(
     className: string,
     maxClassLength: number = 60,
@@ -90,7 +89,6 @@ export function transformer(
     fileInfo,
     api,
     options: Options & {
-        classAttrNames?: string
         classnamesImport?: string
     },
 ) {
@@ -128,10 +126,7 @@ export function transformer(
 
         const ast: Collection = j(fileInfo.source)
 
-        const classAttrNames = [
-            'className',
-            ...(options.classAttrNames || '').split(','),
-        ]
+        const classAttrNames = ['className', 'class']
             .map((x) => x.trim())
             .filter(Boolean)
 
