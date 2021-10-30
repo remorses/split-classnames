@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`existingCall.jsx: existingCall.jsx 1`] = `
+"import clsx from \\"classnames\\";
+function Component() {
+    return (
+        <Fragment>
+            <p
+                className={classnames(
+                    \\"block w-full py-2 mt-8 text-sm font-semibold text-center text-white\\",
+                    \\"bg-gray-900 border border-black rounded-md w-[340px] disabled:opacity-60\\",
+                    \\"hover:cursor-pointer disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]\\"
+                )}
+            />
+        </Fragment>
+    );
+}"
+`;
+
 exports[`readme.jsx: readme.jsx 1`] = `
 "import clsx from \\"classnames\\";
 function Component() {

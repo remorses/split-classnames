@@ -71,6 +71,15 @@ export function splitClassNames(
 
 // TODO let user choose if always add the clsx call instead of leaving short literals classes
 
+const possibleClassNamesImportNames = new Set([
+    'classnames',
+    'classNames',
+    'clsx',
+    'cc',
+    'cx',
+    'cs',
+    'classcat',
+])
 export function transformer(
     fileInfo,
     api,
@@ -233,23 +242,22 @@ export function transformer(
             })
 
             // classnames arguments too long
-            ast.find(j.JSXAttribute, {
-                type: 'JSXAttribute',
-                name: {
-                    type: 'JSXIdentifier',
-                    name: classAttrName,
-                },
-                value: {
-                    type: 'JSXExpressionContainer',
-                    expression: {
-                        type: 'CallExpression',
-                        callee: { name: classNamesImportName },
-                    },
-                },
-            }).forEach((path) => {
+            ast.find(
+                j.JSXAttribute,
+
+                (attr: JSXAttribute) =>
+                    attr.name.name === classAttrName &&
+                    attr?.value?.type === 'JSXExpressionContainer' &&
+                    attr?.value?.expression?.type === 'CallExpression' &&
+                    possibleClassNamesImportNames.has(
+                        // @ts-ignore
+                        attr?.value?.expression?.callee?.name,
+                    ),
+            ).forEach((path) => {
                 shouldInsertCXImport = true
                 const callExpression = j(path).find(j.CallExpression).get()
                 const newArgs: any[] = []
+                const classNamesImportName = callExpression.value.callee.name
                 callExpression.value.arguments.forEach((arg) => {
                     if (arg.type === 'StringLiteral') {
                         const newCxArguments = splitClassNames(arg.value).map(
