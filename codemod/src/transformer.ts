@@ -113,7 +113,7 @@ export function transformer(
                     ),
             )
 
-            if (importDeclarations.length === 1) {
+            if (importDeclarations.length >= 1) {
                 const importDeclaration = importDeclarations.get()
                 const defaultImport = j(importDeclaration)
                     .find(j.ImportDefaultSpecifier)
