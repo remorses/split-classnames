@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { globWithGit } from 'smart-glob'
 import { applyTransform } from 'jscodeshift/dist/testUtils'
-import { DEFAULT_JSC_OPTIONS, transformer } from '.'
+import { DEFAULT_JSC_OPTIONS, transformer } from './transformer'
 
 export async function runCodemod({ glob, dryRun = false }) {
     const files = await globWithGit(glob, {
