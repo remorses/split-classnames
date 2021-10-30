@@ -28,11 +28,8 @@ export function transformer(
     fileInfo,
     api,
     options: Options & {
-        classAttrName?: string
+        classAttrNames?: string
         classnamesImport?: string
-        logicalExp?: boolean
-        conditionalExp?: boolean
-        falsyConditionalExp?: boolean
     },
 ) {
     try {
@@ -69,7 +66,7 @@ export function transformer(
 
         const classAttrName = [
             'className',
-            // ...(options.classAttrName || '').split(','),
+            ...(options.classAttrNames || '').split(','),
         ]
 
         const existingClassNamesImportIdentifer =
