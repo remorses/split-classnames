@@ -5,7 +5,7 @@ const config = {
     bail: 1,
     testEnvironment: 'node',
     // uncopy this to transpile everything
-    // transformIgnorePatterns: ['jkhsdkfjhsdfjkdhsjk'],
+    transformIgnorePatterns: ['jkhsdkfjhsdfjkdhsjk'],
 }
 
 module.exports = config

@@ -1,5 +1,5 @@
 {
-    "name": "package",
+    "name": "babel-plugin-split-classnames",
     "version": "0.0.0",
     "description": "",
     "main": "dist/index.js",
@@ -18,7 +18,10 @@
     "keywords": [],
     "author": "Tommaso De Rossi, morse <beats.by.morse@gmail.com>",
     "license": "ISC",
-    "devDependencies": {},
-    "dependencies": {},
-    "peerDependencies": {}
+    "dependencies": {
+        "jscodeshift": "^0.13.0"
+    },
+    "devDependencies": {
+        "@types/jscodeshift": "^0.11.2"
+    }
 }
