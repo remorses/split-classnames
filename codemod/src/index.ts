@@ -30,12 +30,11 @@ function tailwindSort(a: string, b: string) {
     if (a.includes('[')) {
         return 1
     }
-    // a must be equal to b
+    // keep order
     return 0
 }
 
-// TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
-// groups are: defaults, md, lg, .etc, :dark, :hover, :focus, :active, :disabled
+
 export function splitClassNames(
     className: string,
     maxClassLength: number = 60,
@@ -65,10 +64,7 @@ export function splitClassNames(
     return classGroups
 }
 
-// TODO support out of the box popular classnames libraries: clsx, classnames, etc.
-// i can do this because i only change stuff inside className attribute, this is almost always a classnames implementation
-// user can also give a priority implementation to use
-// you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
+// TODO you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
 
 // TODO let user choose if always add the clsx call instead of leaving short literals classes
 
