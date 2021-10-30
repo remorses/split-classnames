@@ -80,6 +80,9 @@ const possibleClassNamesImportNames = new Set([
     'cs',
     'classcat',
 ])
+
+const CLASSNAMES_IMPORT_SOURCE = 'classnames'
+
 export function transformer(
     fileInfo,
     api,
@@ -103,7 +106,7 @@ export function transformer(
             const importDeclarations = ast.find(j.ImportDeclaration, {
                 type: 'ImportDeclaration',
                 source: {
-                    value: 'classnames',
+                    value: CLASSNAMES_IMPORT_SOURCE,
                 },
             })
 
@@ -127,10 +130,10 @@ export function transformer(
             .map((x) => x.trim())
             .filter(Boolean)
 
-        const existingClassNamesImportIdentifer =
+        const existingClassNamesImportIdentifier =
             getClassNamesIdentifierName(ast)
         const classNamesImportName =
-            existingClassNamesImportIdentifer ||
+            existingClassNamesImportIdentifier ||
             options.classnamesImport ||
             CLASSNAMES_IDENTIFIER_NAME
 
@@ -254,7 +257,6 @@ export function transformer(
                         attr?.value?.expression?.callee?.name,
                     ),
             ).forEach((path) => {
-                shouldInsertCXImport = true
                 const callExpression = j(path).find(j.CallExpression).get()
                 const newArgs: any[] = []
                 const classNamesImportName = callExpression.value.callee.name
@@ -278,14 +280,20 @@ export function transformer(
             })
         }
 
-        if (!existingClassNamesImportIdentifer && shouldInsertCXImport) {
+        if (!existingClassNamesImportIdentifier && shouldInsertCXImport) {
             if (lastLibImport) {
                 lastLibImport.insertAfter(
-                    createImportDeclaration(classNamesImportName, 'classnames'),
+                    createImportDeclaration(
+                        classNamesImportName,
+                        CLASSNAMES_IMPORT_SOURCE,
+                    ),
                 )
             } else {
                 ast.get().node.program.body.unshift(
-                    createImportDeclaration(classNamesImportName, 'classnames'),
+                    createImportDeclaration(
+                        classNamesImportName,
+                        CLASSNAMES_IMPORT_SOURCE,
+                    ),
                 )
             }
         }
