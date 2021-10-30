@@ -11,6 +11,9 @@
         "play": "./bin.js",
         "watch": "tsc -w"
     },
+    "bin": {
+        "split-classnames": "./bin.js"
+    },
     "files": [
         "dist",
         "src",
