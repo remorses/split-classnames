@@ -40,3 +40,10 @@ function Component() {
     )
 }
 ```
+
+## Features
+
+-   Works on simple string literals (`className='something'`)
+-   Works on template literals (`className={`something ${anotherClass}`}`)
+-   Works on existing classnames calls (`className={clsx('very long classNames are slitted in groups')}`)
+-   Sorts the classes for tailwind (variants are put last)
