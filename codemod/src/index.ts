@@ -14,15 +14,25 @@ const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
 // TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
 // groups are: defaults, md, lg, .etc, :dark, :hover, :focus, :active, :disabled
-function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
+function splitClassNames(className: string, maxClassLength: number = 60) {
+    className = className.trim()
+    if (className.length <= maxClassLength) {
+        return [className]
+    }
     const classes = className.split(/\s+/).filter((name) => name.length > 0)
-    if (classes.length <= maxClassesPerGroup) {
-        return [className.trim()]
-    }
     const classGroups: string[] = []
-    for (let i = 0; i < classes.length; i += maxClassesPerGroup) {
-        classGroups.push(classes.slice(i, i + maxClassesPerGroup).join(' '))
+    let currentSize = 0
+    let lastAddedIndex = 0
+
+    for (let i = 0; i < classes.length; i += 1) {
+        currentSize += classes[i].length
+        if (currentSize > maxClassLength || i === classes.length - 1) {
+            classGroups.push(classes.slice(lastAddedIndex, i).join(' '))
+            lastAddedIndex = i
+            currentSize = 0
+        }
     }
+
     return classGroups
 }
 
