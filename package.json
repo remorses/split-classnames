@@ -7,9 +7,6 @@
         "build": "ultra --build -r build",
         "release": "yarn build && changeset publish"
     },
-    "workspaces": [
-        "package"
-    ],
     "devDependencies": {
         "@changesets/cli": "^2.17.0",
         "@jest/types": "^27.2.5",
