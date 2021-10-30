@@ -3,7 +3,7 @@
 exports[`alreadyRun.jsx: alreadyRun.jsx 1`] = `
 "import React from 'react'
 
-import clsx from \\"classnames\\";
+import clsx from 'classnames'
 
 export default function Component() {
     return (
