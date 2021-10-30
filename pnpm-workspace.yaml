@@ -1,2 +1,2 @@
 packages:
-  - babel-plugin
+  - codemod

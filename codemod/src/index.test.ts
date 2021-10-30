@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 
-import { transformer, DEFAULT_JSC_OPTIONS } from '../src/'
+import { transformer, DEFAULT_JSC_OPTIONS } from '.'
 import { applyTransform } from 'jscodeshift/dist/testUtils'
 
 for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
