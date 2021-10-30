@@ -24,6 +24,13 @@ function splitClassNames(className: string, maxClassesPerGroup: number = 5) {
     return classGroups
 }
 
+// TODO support out of the box popular classnames libraries: clsx, classnames, etc.
+// i can do this because i only change stuff inside className attribute, this is almost always a classnames implementation
+// user can also give a priority implementation to use
+// you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
+// TODO group classes by tailwind type (e.g. flex, grid, font and text, etc)
+// TODO
+
 export function transformer(
     fileInfo,
     api,
@@ -64,10 +71,12 @@ export function transformer(
 
         const ast: Collection = j(fileInfo.source)
 
-        const classAttrName = [
+        const classAttrNames = [
             'className',
             ...(options.classAttrNames || '').split(','),
         ]
+            .map((x) => x.trim())
+            .filter(Boolean)
 
         const existingClassNamesImportIdentifer =
             getClassNamesIdentifierName(ast)
@@ -95,7 +104,7 @@ export function transformer(
 
         let shouldInsertCXImport = false
 
-        classAttrName.forEach((classAttrName) => {
+        for (const classAttrName of classAttrNames) {
             // simple literals or literals inside expressions
             ast.find(
                 j.JSXAttribute,
@@ -224,7 +233,7 @@ export function transformer(
                     ),
                 )
             })
-        })
+        }
 
         if (!existingClassNamesImportIdentifer && shouldInsertCXImport) {
             lastLibImport.insertAfter(
