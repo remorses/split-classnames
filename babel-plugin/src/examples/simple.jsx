@@ -4,6 +4,7 @@ export default function Component() {
   return (
     <div>
       <p className={`${someClass} ${otherClass}`}></p>
+      <p className='ciao'></p>
       <p className={`literal-class literal-class-2`}></p>
       <p className={`literal-class ${anotherClass} literal-class-2`}></p>
       <p className={`
