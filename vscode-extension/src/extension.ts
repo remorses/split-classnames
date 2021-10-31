@@ -46,6 +46,9 @@ export function activate(context: vscode.ExtensionContext) {
     if (config.get('vscode-extension.runOnSave')) {
         context.subscriptions.push(
             vscode.workspace.onWillSaveTextDocument((_e) => {
+                if (!allowedLanguageIds.has(_e.document.languageId)) {
+                    return
+                }
                 vscode.commands.executeCommand(SPLIT_CLASSNAMES_COMMAND)
             }),
         )
