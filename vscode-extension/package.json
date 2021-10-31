@@ -10,26 +10,48 @@
         "Other"
     ],
     "activationEvents": [
-        "onCommand:vscode-extension.helloWorld"
+        "onCommand:vscode-extension.splitClassNames"
     ],
     "main": "./dist/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "vscode-extension.helloWorld",
-                "title": "Hello World"
+                "command": "vscode-extension.splitClassNames",
+                "title": "Split long classNames"
+            }
+        ],
+        "configuration": [
+            {
+                "title": "classNames splitter",
+                "properties": {
+                    "vscode-extension.runOnSave": {
+                        "type": "boolean",
+                        "items": {
+                            "type": "string"
+                        },
+                        "default": false,
+                        "description": "Run on save"
+                    }
+                }
+            }
+        ],
+        "keybindings": [
+            {
+                "key": "",
+                "command": "vscode-extension.splitClassNames"
             }
         ]
     },
     "scripts": {
         "vscode:prepublish": "yarn run build",
         "build": "tsc ",
-        "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/..",
+        "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/../codemod",
         "watch": "tsc --watch ",
         "pretest": "yarn run build",
         "test": "node ./dist/test/runTest.js"
     },
     "devDependencies": {
+        "codemod-split-classnames": "workspace:^0.0.0",
         "@types/vscode": "^1.61.0",
         "@types/glob": "^7.1.4",
         "@types/mocha": "^9.0.0",
