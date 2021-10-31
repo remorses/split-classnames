@@ -3,7 +3,7 @@ import fs from 'fs'
 
 import { transformer, splitClassNames } from './transformer'
 import { applyTransform } from 'jscodeshift/dist/testUtils'
-import { transformSource } from '.'
+import { transformUsingRegex, transformSource } from '.'
 
 for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
     const testFile = path.resolve(__dirname, 'examples', testName)
@@ -59,31 +59,18 @@ test('splitClassNames sorts classes for tailwind', () => {
 })
 
 test('regex', () => {
-    const regexAllTags = /<([a-zA-Z1-6]+)([^<]+)(?:>|\/>)/gim
     for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
         const testFile = path.resolve(__dirname, 'examples', testName)
         const source = fs.readFileSync(testFile, 'utf8').toString()
-        const res = Array.from(source.match(regexAllTags) || [])
-        res.forEach((jsxTag) => {
-            jsxTag = jsxTag.trim()
-            if (!jsxTag) {
-                return
-            }
-            const isOpeningTag = !jsxTag.endsWith('/>')
-            const withClosingTag = isOpeningTag
-                ? jsxTag.replace(/>$/, '/>')
-                : jsxTag
-            try {
-                console.log('match [' + jsxTag + ']')
-                let res = transformSource(withClosingTag.trim())
-                if (isOpeningTag) {
-                    res = res.replace(/\/>$/, '>')
-                }
-                console.log('transformed', res)
-            } catch (e) {
-                console.log('error at', withClosingTag, e)
-                throw e
-            }
-        })
+
+        const results = transformUsingRegex(source)
+        let newSource = source
+        for (let res of results) {
+            newSource = replaceRange(newSource, res.start, res.end, res.str)
+        }
+        expect(newSource).toMatchSnapshot('regex ' + testName )
     }
 })
+function replaceRange(s, start, end, substitute) {
+    return s.substring(0, start) + substitute + s.substring(end)
+}

@@ -85,11 +85,15 @@ const CLASSNAMES_IMPORT_SOURCE = 'classnames'
 export function transformer(
     { source },
     { jscodeshift },
-    options: Options & {
+    {
+        classnamesImport,
+        skipImportDeclaration = false,
+        ...options
+    }: Options & {
         classnamesImport?: string
+        skipImportDeclaration?: boolean
     },
 ) {
-    options = { ...options }
     try {
         const j: JSCodeshift = jscodeshift
 
@@ -131,7 +135,7 @@ export function transformer(
             getClassNamesIdentifierName(ast)
         const classNamesImportName =
             existingClassNamesImportIdentifier ||
-            options.classnamesImport ||
+            classnamesImport ||
             CLASSNAMES_IDENTIFIER_NAME
 
         const lastLibImport: any = (() => {
@@ -276,7 +280,11 @@ export function transformer(
             })
         }
 
-        if (!existingClassNamesImportIdentifier && shouldInsertCXImport) {
+        if (
+            !skipImportDeclaration &&
+            !existingClassNamesImportIdentifier &&
+            shouldInsertCXImport
+        ) {
             if (lastLibImport) {
                 lastLibImport.insertAfter(
                     createImportDeclaration(
