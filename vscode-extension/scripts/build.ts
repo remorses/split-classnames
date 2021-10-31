@@ -9,6 +9,7 @@ async function main() {
         bundle: true,
         // splitting: true,
         format: 'cjs',
+        watch: Boolean(process.env.WATCH),
         external: ['vscode', 'flow-parser'],
         plugins: [
             {
