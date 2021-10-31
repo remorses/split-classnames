@@ -293,7 +293,7 @@ export function transformer(
                 )
             }
         }
-        return ast.toSource(options as any)
+        return ast.toSource({ ...options, parser: 'tsx' })
     } catch (e) {
         // console.error(e)
         throw e

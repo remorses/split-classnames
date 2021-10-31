@@ -2,8 +2,8 @@ import React from 'react'
 
 export default function Component() {
     return (
-        <div>
-            <p className='ciao'></p>
+        <div className='ciao'>
+            <p className='ciao'/>
             <p
                 className={clsx(
                     'block w-full py-2 mt-8 text-sm font-semibold text-center text-white bg-gray-900 border block w-full py-2 mt-8 text-sm font-semibold text-center text-white bg-gray-900 border',

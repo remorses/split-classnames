@@ -1,21 +1,15 @@
 import path from 'path'
 import fs from 'fs'
 
-import { transformer, DEFAULT_JSC_OPTIONS, splitClassNames } from './transformer'
+import { transformer, splitClassNames } from './transformer'
 import { applyTransform } from 'jscodeshift/dist/testUtils'
+import { transformSource } from '.'
 
 for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
     const testFile = path.resolve(__dirname, 'examples', testName)
     const source = fs.readFileSync(testFile, 'utf8').toString()
     test(testName, () => {
-        const res = applyTransform(
-            transformer,
-            DEFAULT_JSC_OPTIONS,
-            {
-                source,
-            },
-            DEFAULT_JSC_OPTIONS,
-        )
+        const res = transformSource(source)
         if (process.env.DEBUG) {
             console.log()
             console.log(res)
@@ -62,4 +56,34 @@ test('splitClassNames sorts classes for tailwind', () => {
             'disabled:w-8 dark:w-5 hover:text-gray-800 hover:h-[800px]',
         ]),
     )
+})
+
+test('regex', () => {
+    const regexAllTags = /<([a-zA-Z1-6]+)([^<]+)(?:>|\/>)/gim
+    for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
+        const testFile = path.resolve(__dirname, 'examples', testName)
+        const source = fs.readFileSync(testFile, 'utf8').toString()
+        const res = Array.from(source.match(regexAllTags) || [])
+        res.forEach((jsxTag) => {
+            jsxTag = jsxTag.trim()
+            if (!jsxTag) {
+                return
+            }
+            const isOpeningTag = !jsxTag.endsWith('/>')
+            const withClosingTag = isOpeningTag
+                ? jsxTag.replace(/>$/, '/>')
+                : jsxTag
+            try {
+                console.log('match [' + jsxTag + ']')
+                let res = transformSource(withClosingTag.trim())
+                if (isOpeningTag) {
+                    res = res.replace(/\/>$/, '>')
+                }
+                console.log('transformed', res)
+            } catch (e) {
+                console.log('error at', withClosingTag, e)
+                throw e
+            }
+        })
+    }
 })
