@@ -23,8 +23,9 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn run build",
-        "build": "tsc -p ./",
-        "watch": "tsc -watch -p ./",
+        "build": "tsc ",
+        "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/..",
+        "watch": "tsc --watch ",
         "pretest": "yarn run build",
         "test": "node ./dist/test/runTest.js"
     },
