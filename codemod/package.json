@@ -1,11 +1,12 @@
 {
-    "name": "codemod",
+    "name": "codemod-split-classnames",
     "version": "0.0.0",
     "description": "",
     "main": "dist/index.js",
+    "sideEffects": false,
     "module": "esm/index.js",
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/remorses/esbuild-plugins.git",
+    "repository": "https://github.com/remorses/",
     "scripts": {
         "build": "tsc && tsc -m es6 --outDir esm",
         "play": "./bin.js",

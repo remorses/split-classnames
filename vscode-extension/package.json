@@ -44,7 +44,7 @@
     },
     "scripts": {
         "vscode:prepublish": "yarn run build",
-        "build": "tsc ",
+        "build": "esno scripts/build",
         "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/../codemod",
         "watch": "tsc --watch ",
         "pretest": "yarn run build",

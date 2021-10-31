@@ -1,6 +1,3 @@
-export const DEFAULT_JSC_OPTIONS = {
-    parser: 'tsx',
-}
 import {
     API,
     Collection,
@@ -86,15 +83,15 @@ const possibleClassNamesImportSources = new Set([
 const CLASSNAMES_IMPORT_SOURCE = 'classnames'
 
 export function transformer(
-    fileInfo,
-    api,
+    { source },
+    { jscodeshift },
     options: Options & {
         classnamesImport?: string
     },
 ) {
+    options = { ...options }
     try {
-        const filePath = fileInfo.path
-        const j: JSCodeshift = api.jscodeshift
+        const j: JSCodeshift = jscodeshift
 
         function createImportDeclaration(identifierName, source) {
             return j.importDeclaration(
@@ -124,7 +121,7 @@ export function transformer(
             return null
         }
 
-        const ast: Collection = j(fileInfo.source)
+        const ast: Collection = j(source)
 
         const classAttrNames = ['className', 'class']
             .map((x) => x.trim())

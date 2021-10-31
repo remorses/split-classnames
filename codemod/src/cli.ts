@@ -2,8 +2,7 @@ import yargs, { CommandModule } from 'yargs'
 import fs from 'fs'
 import path from 'path'
 import { globWithGit } from 'smart-glob'
-import { applyTransform } from 'jscodeshift/dist/testUtils'
-import { DEFAULT_JSC_OPTIONS, transformer } from './transformer'
+import { transformSource } from './index'
 
 export async function runCodemod({ glob, dryRun = false }) {
     const files = await globWithGit(glob, {
@@ -20,15 +19,7 @@ export async function runCodemod({ glob, dryRun = false }) {
         }
         const ext = path.extname(file)
         console.info(`=> ${dryRun ? 'Processing' : 'Applying to'} [${file}]`)
-        source = await applyTransform(
-            transformer,
-            { ...DEFAULT_JSC_OPTIONS },
-            {
-                source,
-                path: file,
-            },
-            DEFAULT_JSC_OPTIONS,
-        )
+        source = transformSource(source, {})
         results.push(source)
         if (!dryRun) {
             await fs.promises.writeFile(file, source, { encoding: 'utf-8' })
