@@ -47,39 +47,46 @@ async function promptLicenseKey(extensionConfig: Conf, prompt: string) {
     const valid = await validateLicenseKey(res || '')
     if (valid) {
         extensionConfig.set('licenseKey', res)
-        vscode.window.showInformationMessage('License key for split-classnames saved!')
+        vscode.window.showInformationMessage(
+            'License key for split-classnames saved!',
+        )
         return true
     } else {
-        vscode.window.showErrorMessage('Invalid license key for split-classnames')
+        vscode.window.showErrorMessage(
+            'Invalid license key for split-classnames',
+        )
         return false
     }
 }
 
-export async function activate(context: vscode.ExtensionContext) {
+export function activate(context: vscode.ExtensionContext) {
     console.log('Extension active')
     const extensionConfig = new Conf({ projectName: 'vscode-split-classnames' })
     const licenseKey = extensionConfig.get<string>('licenseKey') as any
     let validLicense = true
-    if (!licenseKey) {
-        const success = await promptLicenseKey(
-            extensionConfig,
-            'Enter the Gumroad license key for vscode-split-classnames to use the extension',
-        )
-        if (!success) {
-            validLicense = false
-        }
-    } else {
-        const valid = await validateLicenseKey(licenseKey)
-        if (!valid) {
+    Promise.resolve().then(async function validateOnStartup() {
+        if (!licenseKey) {
             const success = await promptLicenseKey(
                 extensionConfig,
-                'Saved license key is invalid, please enter new license key for split-sclassnames',
+                'Enter the Gumroad license key for vscode-split-classnames to use the extension',
             )
             if (!success) {
                 validLicense = false
             }
+        } else {
+            const valid = await validateLicenseKey(licenseKey)
+            if (!valid) {
+                const success = await promptLicenseKey(
+                    extensionConfig,
+                    'Saved license key is invalid, please enter new license key for split-sclassnames',
+                )
+                if (!success) {
+                    validLicense = false
+                }
+            }
         }
-    }
+    })
+
     context.subscriptions.push(
         vscode.commands.registerTextEditorCommand(
             SPLIT_CLASSNAMES_COMMAND,
