@@ -47,7 +47,7 @@ async function promptLicenseKey(extensionConfig: Conf, prompt: string) {
     const valid = await validateLicenseKey(res || '')
     if (valid) {
         extensionConfig.set('licenseKey', res)
-        // vscode.window.showInformationMessage('License key saved!')
+        vscode.window.showInformationMessage('License key for split-classnames saved!')
         return true
     } else {
         vscode.window.showErrorMessage('Invalid license key for split-classnames')
