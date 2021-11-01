@@ -1,18 +1,26 @@
 import Head from 'next/head'
+import React from 'react'
+import Script from 'next/script'
 import gradientBg from '../public/bg_gradient.svg'
+import { Link } from '@app/components/Link'
+import NextLink from 'next/link'
+import { Footer } from '@app/components/Footer'
 console.log(gradientBg.src)
 export default function Home() {
     return (
-        <div className='flex flex-col text-gray-200 items-center  min-h-screen py-2 w-full'>
+        <div className='flex space-y-8 flex-col text-gray-200 items-center  min-h-screen py-2 w-full'>
+            <Script src='https://gumroad.com/js/gumroad-embed.js'></Script>
+
             <div
-                className='absolute mx-auto h-[800px] top-[700px] w-[100vw] left-0 right-0 2xl:scale-x-150'
+                className='absolute mx-auto h-[500px] top-[700px] w-[100vw] left-0 right-0 2xl:scale-x-150'
                 style={{
                     backgroundImage: `url("${gradientBg.src}")`,
                     backgroundSize: 'auto',
+                    backgroundRepeat: 'no-repeat',
                     backgroundPosition: 'center top',
                 }}
             />
-            <div className='max-w-screen-2xl mx-auto w-full px-8'>
+            <div className='max-w-screen-2xl flex flex-col mx-auto w-full px-8 min-h-screen'>
                 <Header
                     navs={[
                         { content: 'home', url: '#' },
@@ -20,6 +28,46 @@ export default function Home() {
                     ]}
                 />
                 <Hero />
+                <GumroadCheckout />
+                <div className='flex-1' />
+                <Footer
+                    justifyAround
+                    className='!mt-24'
+                    businessName='Notaku'
+                    columns={{
+                        Resources: [
+                            <NextLink passHref href='/docs'>
+                                <Link>Quick start</Link>
+                            </NextLink>,
+                        ],
+                        Company: [
+                            <Link
+                                target='_blank'
+                                href='https://twitter.com/__morse'
+                            >
+                                Twitter
+                            </Link>,
+                        ],
+                        'Who made this?': [
+                            <Link href='https://twitter.com/__morse'>
+                                Twitter
+                            </Link>,
+                            <Link href='https://github.com/remorses/'>
+                                Github
+                            </Link>,
+                        ],
+                    }}
+                />
+            </div>
+        </div>
+    )
+}
+
+function GumroadCheckout() {
+    return (
+        <div className='relative flex flex-col items-center mt-20 z-50'>
+            <div className=' gumroad-product-embed'>
+                <a href='https://gumroad.com/l/nNrvI'>Loading...</a>
             </div>
         </div>
     )
@@ -97,7 +145,25 @@ function Header({ navs }) {
     )
 }
 
-function Hero({}) {
+function Hero() {
+    return (
+        <section className='relative flex flex-col items-center'>
+            <p className='text-indigo-400 md:text-lg xl:text-xl font-semibold mb-4 md:mb-6'>
+                Very proud to introduce
+            </p>
+            <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-8 md:mb-12'>
+                Revolutionary way to build the web
+            </h1>
+            <p className='lg:w-4/ xl:text-lg mx-auto lg:mx-0 max-w-xl leading-relaxed mb-8 md:mb-12'>
+                This is a section of some simple filler text, also known as
+                placeholder text. It shares some characteristics of a real
+                written text but is random.
+            </p>
+        </section>
+    )
+}
+
+function Hero_({}) {
     return (
         <section className='relative flex flex-col lg:flex-row justify-between gap-6 sm:gap-10 md:gap-16'>
             {/* content - start */}
