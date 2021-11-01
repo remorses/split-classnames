@@ -219,7 +219,7 @@ function CodeComparison({ transformedCode }) {
             <div className='relative'>
                 <CodeEditor onChange={(x) => setCode(x)} code={code} />
                 <Arrow
-                    style={{ transform: 'scaleX(-1) rotate(70deg)' }}
+                    style={{ transform: 'scaleX(-1) rotate(90deg)' }}
                     className='text-gray-300 fill-current absolute h-24 z-10 right-0 -bottom-10'
                 />
             </div>
