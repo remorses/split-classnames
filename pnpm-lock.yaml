@@ -67,24 +67,36 @@ importers:
 
   website:
     specifiers:
+      '@types/prismjs': ^1.16.6
       '@types/react': ^17.0.33
       autoprefixer: ^10.2.6
       classnames: ^2.3.1
+      codemod-split-classnames: workspace:^0.0.0
+      lodash: ^4.17.21
       next: latest
+      next-transpile-modules: ^9.0.0
       node-fetch: ^3.0.0
       postcss: ^8.3.5
+      prismjs: ^1.25.0
       react: ^17.0.2
       react-dom: ^17.0.2
+      react-simple-code-editor: ^0.11.0
       tailwindcss: ^2.2.4
     dependencies:
       classnames: 2.3.1
+      codemod-split-classnames: link:../codemod
+      lodash: 4.17.21
       next: 12.0.2_react-dom@17.0.2+react@17.0.2
       node-fetch: 3.0.0
+      prismjs: 1.25.0
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
+      react-simple-code-editor: 0.11.0_react-dom@17.0.2+react@17.0.2
     devDependencies:
+      '@types/prismjs': 1.16.6
       '@types/react': 17.0.33
       autoprefixer: 10.4.0_postcss@8.3.11
+      next-transpile-modules: 9.0.0
       postcss: 8.3.11
       tailwindcss: 2.2.19_0c54bdadaf9d9c9c6c134cb2c6c061a3
 
@@ -1309,6 +1321,10 @@ packages:
 
   /@types/prettier/2.4.1:
     resolution: {integrity: sha512-Fo79ojj3vdEZOHg3wR9ksAMRz4P3S5fDB5e/YWZiFnyFQI1WY2Vftu9XoXVVtJfxB7Bpce/QTqWSSntkz2Znrw==}
+    dev: true
+
+  /@types/prismjs/1.16.6:
+    resolution: {integrity: sha512-dTvnamRITNqNkqhlBd235kZl3KfVJQQoT5jkXeiWSBK7i4/TLKBNLV0S1wOt8gy4E2TY722KLtdmv2xc6+Wevg==}
     dev: true
 
   /@types/prop-types/15.7.4:
@@ -2670,6 +2686,14 @@ packages:
     dependencies:
       iconv-lite: 0.6.3
     dev: false
+
+  /enhanced-resolve/5.8.3:
+    resolution: {integrity: sha512-EGAbGvH7j7Xt2nc0E7D99La1OiEs8LnyimkRgwExpUMScN6O+3x9tIWs7PLQZVNx4YD+00skHXPXi1yQHpAmZA==}
+    engines: {node: '>=10.13.0'}
+    dependencies:
+      graceful-fs: 4.2.8
+      tapable: 2.2.1
+    dev: true
 
   /enquirer/2.3.6:
     resolution: {integrity: sha512-yjNnPr315/FjS4zIsUxYguYUPP2e1NK4d7E7ZOLiyYCcbFBiTMyID+2wvm2w6+pZ/odMA7cRkjhsPbltwBOrLg==}
@@ -5111,6 +5135,13 @@ packages:
     resolution: {integrity: sha512-CXdUiJembsNjuToQvxayPZF9Vqht7hewsvy2sOWafLvi2awflj9mOC6bHIg50orX8IJvWKY9wYQ/zB2kogPslQ==}
     dev: false
 
+  /next-transpile-modules/9.0.0:
+    resolution: {integrity: sha512-VCNFOazIAnXn1hvgYYSTYMnoWgKgwlYh4lm1pKbSfiB3kj5ZYLcKVhfh3jkPOg1cnd9DP+pte9yCUocdPEUBTQ==}
+    dependencies:
+      enhanced-resolve: 5.8.3
+      escalade: 3.1.1
+    dev: true
+
   /next/12.0.2_react-dom@17.0.2+react@17.0.2:
     resolution: {integrity: sha512-8YfNLK1pPYZzAhTB1EkaRdpT3KiRUlK8ad3gJOweeclAL7O5c96/GnrEZKMoSkpq1U0Lxa0qRf8ciUmzGfmDmA==}
     engines: {node: '>=12.22.0'}
@@ -5671,6 +5702,10 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
+  /prismjs/1.25.0:
+    resolution: {integrity: sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg==}
+    dev: false
+
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
     dev: true
@@ -5795,6 +5830,16 @@ packages:
   /react-refresh/0.8.3:
     resolution: {integrity: sha512-X8jZHc7nCMjaCqoU+V2I0cOhNW+QMBwSUkeXnTi8IPe6zaRWfn60ZzvFDZqWPfmSJfjub7dDW1SP0jaHWLu/hg==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /react-simple-code-editor/0.11.0_react-dom@17.0.2+react@17.0.2:
+    resolution: {integrity: sha512-xGfX7wAzspl113ocfKQAR8lWPhavGWHL3xSzNLeseDRHysT+jzRBi/ExdUqevSMos+7ZtdfeuBOXtgk9HTwsrw==}
+    peerDependencies:
+      react: ^16.0.0
+      react-dom: ^16.0.0
+    dependencies:
+      react: 17.0.2
+      react-dom: 17.0.2_react@17.0.2
     dev: false
 
   /react/17.0.2:
@@ -6567,6 +6612,11 @@ packages:
       tmp: 0.2.1
     transitivePeerDependencies:
       - ts-node
+    dev: true
+
+  /tapable/2.2.1:
+    resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
+    engines: {node: '>=6'}
     dev: true
 
   /temp/0.8.4:

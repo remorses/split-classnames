@@ -5,6 +5,7 @@ import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 import { WavesBg } from '.'
 import fetch from 'node-fetch'
+import { CodeEditor } from '@app/components/CodeEditor'
 
 export default function Success({ licenseKey }) {
     const router = useRouter()
