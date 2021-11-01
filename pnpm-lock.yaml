@@ -71,6 +71,7 @@ importers:
       autoprefixer: ^10.2.6
       classnames: ^2.3.1
       next: latest
+      node-fetch: ^3.0.0
       postcss: ^8.3.5
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -78,6 +79,7 @@ importers:
     dependencies:
       classnames: 2.3.1
       next: 12.0.2_react-dom@17.0.2+react@17.0.2
+      node-fetch: 3.0.0
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
     devDependencies:
@@ -3134,7 +3136,6 @@ packages:
     engines: {node: ^12.20 || >= 14.13}
     dependencies:
       web-streams-polyfill: 3.1.1
-    dev: true
 
   /fill-range/4.0.0:
     resolution: {integrity: sha1-1USBHUKPmOsGpj3EAtJAPDKMOPc=}
@@ -5220,7 +5221,6 @@ packages:
     dependencies:
       data-uri-to-buffer: 3.0.1
       fetch-blob: 3.1.3
-    dev: true
 
   /node-html-parser/1.4.9:
     resolution: {integrity: sha512-UVcirFD1Bn0O+TSmloHeHqZZCxHjvtIeGdVdGMhyZ8/PWlEiZaZ5iJzR189yKZr8p0FXN58BUeC7RHRkf/KYGw==}
@@ -6983,7 +6983,6 @@ packages:
   /web-streams-polyfill/3.1.1:
     resolution: {integrity: sha512-Czi3fG883e96T4DLEPRvufrF2ydhOOW1+1a6c3gNjH2aIh50DNFBdfwh2AKoOf1rXvpvavAoA11Qdq9+BKjE0Q==}
     engines: {node: '>= 8'}
-    dev: true
 
   /webidl-conversions/4.0.2:
     resolution: {integrity: sha512-YQ+BmxuTgd6UXZW3+ICGfyqRyHXVlD5GtQr5+qjiNW7bF0cqrzX500HVXPBOvgXb5YnzDd+h0zqyv61KUD7+Sg==}

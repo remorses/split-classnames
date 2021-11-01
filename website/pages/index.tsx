@@ -4,22 +4,15 @@ import Script from 'next/script'
 import gradientBg from '../public/bg_gradient.svg'
 import { Link } from '@app/components/Link'
 import NextLink from 'next/link'
+import clsx from 'classnames'
 import { Footer } from '@app/components/Footer'
 console.log(gradientBg.src)
 export default function Home() {
     return (
-        <div className='flex space-y-8 flex-col text-gray-200 items-center  min-h-screen py-2 w-full'>
-            <Script src='https://gumroad.com/js/gumroad-embed.js'></Script>
+        <div className='flex space-y-8 flex-col text-gray-200 items-center  py-2 w-full'>
+            <Script src='https://gumroad.com/js/gumroad.js'></Script>
 
-            <div
-                className='absolute mx-auto h-[500px] top-[700px] w-[100vw] left-0 right-0 2xl:scale-x-150'
-                style={{
-                    backgroundImage: `url("${gradientBg.src}")`,
-                    backgroundSize: 'auto',
-                    backgroundRepeat: 'no-repeat',
-                    backgroundPosition: 'center top',
-                }}
-            />
+            <WavesBg />
             <div className='max-w-screen-2xl flex flex-col mx-auto w-full px-8 min-h-screen'>
                 <Header
                     navs={[
@@ -28,38 +21,33 @@ export default function Home() {
                     ]}
                 />
                 <Hero />
-                <GumroadCheckout />
+
                 <div className='flex-1' />
                 <Footer
                     justifyAround
                     className='!mt-24'
                     businessName='Notaku'
-                    columns={{
-                        Resources: [
-                            <NextLink passHref href='/docs'>
-                                <Link>Quick start</Link>
-                            </NextLink>,
-                        ],
-                        Company: [
-                            <Link
-                                target='_blank'
-                                href='https://twitter.com/__morse'
-                            >
-                                Twitter
-                            </Link>,
-                        ],
-                        'Who made this?': [
-                            <Link href='https://twitter.com/__morse'>
-                                Twitter
-                            </Link>,
-                            <Link href='https://github.com/remorses/'>
-                                Github
-                            </Link>,
-                        ],
-                    }}
                 />
             </div>
         </div>
+    )
+}
+
+export function WavesBg({ top = 700, className = '' }) {
+    return (
+        <div
+            className={clsx(
+                className,
+                'absolute mx-auto h-[500px] w-[100vw] left-0 right-0 2xl:scale-x-150',
+            )}
+            style={{
+                backgroundImage: `url("${gradientBg.src}")`,
+                backgroundSize: 'auto',
+                top,
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center top',
+            }}
+        />
     )
 }
 
@@ -69,6 +57,16 @@ function GumroadCheckout() {
             <div className=' gumroad-product-embed'>
                 <a href='https://gumroad.com/l/nNrvI'>Loading...</a>
             </div>
+        </div>
+    )
+}
+
+function GumroadButton({ className = '' }) {
+    return (
+        <div className={clsx('relative flex flex-col', className)}>
+            <a className='gumroad-button' href='https://gumroad.com/l/nNrvI'>
+                Buy License Key
+            </a>
         </div>
     )
 }
@@ -116,12 +114,7 @@ function Header({ navs }) {
             </nav>
             {/* nav - end */}
             {/* buttons - start */}
-            <a
-                href='#'
-                className='hidden !ml-12 text-gray-700 lg:inline-block bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300 -sm md:text-base font-semibold text-center rounded-lg outline-none transition duration-100 px-4 py-2'
-            >
-                Contact Sales
-            </a>
+            <GumroadButton className='!ml-12 scale-90' />
             <button
                 type='button'
                 className='inline-flex text-gray-700 items-center lg:hidden bg-gray-200 hover:bg-gray-300 focus-visible:ring ring-indigo-300  text-sm md:text-base font-semibold rounded-lg gap-2 px-2.5 py-2'
@@ -159,6 +152,9 @@ function Hero() {
                 placeholder text. It shares some characteristics of a real
                 written text but is random.
             </p>
+            <div className=''>
+                <GumroadButton />
+            </div>
         </section>
     )
 }

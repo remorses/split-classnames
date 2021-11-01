@@ -4,3 +4,5 @@ esm
 .DS_Store
 *.tsbuildinfo
 .ultra.cache.json
+.env*
+!.env.example

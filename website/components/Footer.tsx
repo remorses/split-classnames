@@ -1,15 +1,32 @@
 import clsx from 'classnames'
 import React, { ComponentPropsWithoutRef, ReactNode } from 'react'
+import { Link } from './Link'
+import NextLink from 'next/link'
 
 export type FooterProps = {
-    columns: { [k: string]: ReactNode[] }
+    columns?: { [k: string]: ReactNode[] }
     businessName?: string
     justifyAround?: boolean
 } & ComponentPropsWithoutRef<'div'>
 
 export function Footer({
     className = '',
-    columns = {},
+    columns = {
+        Resources: [
+            <NextLink passHref href='/docs'>
+                <Link>Quick start</Link>
+            </NextLink>,
+        ],
+        Company: [
+            <Link target='_blank' href='https://twitter.com/__morse'>
+                Twitter
+            </Link>,
+        ],
+        'Who made this?': [
+            <Link href='https://twitter.com/__morse'>Twitter</Link>,
+            <Link href='https://github.com/remorses/'>Github</Link>,
+        ],
+    },
     justifyAround = false,
     businessName = 'Notaku',
     ...rest
