@@ -26,15 +26,13 @@
     "devDependencies": {
         "@types/eslint": "^8.2.0",
         "eslint": "^8.3.0",
-        "estree-jsx": "^0.0.1",
-        "jscodeshift": "^0.13.0"
+        "estree-jsx": "^0.0.1"
     },
     "peerDependencies": {
         "eslint": "^8.3.0"
     },
     "dependencies": {
         "ast-types": "^0.14.2",
-        "astring": "^1.8.1",
-        "clone": "^2.1.2"
+        "jscodeshift": "^0.13.0"
     }
 }

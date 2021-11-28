@@ -1,18 +1,10 @@
-import {
-    API,
+import _jscodeshift, {
     Collection,
-    FileInfo,
-    JSCodeshift,
-    Options,
-    JSXAttribute,
     ImportDeclaration,
+    JSCodeshift,
+    JSXAttribute,
 } from 'jscodeshift'
-import { Rule } from 'eslint'
-import clone from 'clone'
-import _jscodeshift from 'jscodeshift'
-import { generate } from 'astring'
 
-import { builders as b } from 'ast-types'
 const j: JSCodeshift = _jscodeshift
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
@@ -377,7 +369,7 @@ export const rule: import('eslint').Rule.RuleModule = {
 
                 const transformed = transformer(
                     {
-                        source: clone(ast),
+                        source: ast,
                         report,
                     },
                     params,
