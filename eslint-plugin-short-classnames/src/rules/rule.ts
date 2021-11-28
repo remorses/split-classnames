@@ -1,9 +1,4 @@
-import _jscodeshift, {
-    Collection,
-    ImportDeclaration,
-    JSCodeshift,
-    JSXAttribute,
-} from 'jscodeshift'
+import _jscodeshift, { JSCodeshift } from 'jscodeshift'
 
 const j: JSCodeshift = _jscodeshift.withParser('tsx')
 
@@ -83,6 +78,8 @@ const possibleClassNamesImportSources = new Set([
     'classcat',
 ])
 
+
+// TODO custom function import source
 const CLASSNAMES_IMPORT_SOURCE = 'classnames'
 
 const meta: import('eslint').Rule.RuleMetaData = {
@@ -118,9 +115,14 @@ export const rule: import('eslint').Rule.RuleModule = {
     create(context) {
         const [params = {}] = context.options
         const { functionName, maxClassNameCharacters } = params
-        let eslintAst
         let addedImport = false
-        function report({ replaceWith: replaceWith, node }: ReportArg) {
+        function report({
+            replaceWith: replaceWith,
+            node,
+        }: {
+            node: import('ast-types').ASTNode
+            replaceWith?: import('ast-types').ASTNode
+        }) {
             context.report({
                 node: node as any,
                 message:
@@ -338,25 +340,4 @@ export const rule: import('eslint').Rule.RuleModule = {
             },
         }
     },
-}
-
-interface ReportArg {
-    node: import('ast-types').ASTNode
-    replaceWith?: import('ast-types').ASTNode
-}
-
-function findProgramNode(root): any {
-    let result = null
-
-    root.forEach((p) => {
-        let parent = p
-
-        while (parent.parent != null && parent.parent.value.body == null) {
-            parent = parent.parent
-        }
-
-        result = parent
-    })
-
-    return result
 }
