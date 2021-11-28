@@ -1,6 +1,6 @@
 {
     "name": "eslint-plugin-short-classnames",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Eslint plugin to keep className attributes short and readable",
     "main": "dist/index.js",
     "sideEffects": false,

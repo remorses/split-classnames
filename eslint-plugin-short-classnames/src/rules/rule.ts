@@ -5,7 +5,7 @@ import _jscodeshift, {
     JSXAttribute,
 } from 'jscodeshift'
 
-const j: JSCodeshift = _jscodeshift
+const j: JSCodeshift = _jscodeshift.withParser('tsx')
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
