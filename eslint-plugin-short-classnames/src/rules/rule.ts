@@ -111,27 +111,6 @@ export function transformer(
     },
 ) {
     try {
-        const getClassNamesIdentifierName = (ast) => {
-            const importDeclarations = ast.find(
-                j.ImportDeclaration,
-                (node: ImportDeclaration) =>
-                    node.type === 'ImportDeclaration' &&
-                    possibleClassNamesImportSources.has(
-                        node.source?.value as string,
-                    ),
-            )
-
-            if (importDeclarations.length >= 1) {
-                const importDeclaration = importDeclarations.get()
-                const defaultImport = j(importDeclaration)
-                    .find(j.ImportDefaultSpecifier)
-                    .get()
-
-                return defaultImport.node.local.name
-            }
-            return null
-        }
-
         const ast: Collection = j(eslintAst)
 
         const classAttrNames = ['className', 'class']
@@ -431,4 +410,23 @@ function findProgramNode(root): any {
     })
 
     return result
+}
+
+const getClassNamesIdentifierName = (ast) => {
+    const importDeclarations = ast.find(
+        j.ImportDeclaration,
+        (node: ImportDeclaration) =>
+            node.type === 'ImportDeclaration' &&
+            possibleClassNamesImportSources.has(node.source?.value as string),
+    )
+
+    if (importDeclarations.length >= 1) {
+        const importDeclaration = importDeclarations.get()
+        const defaultImport = j(importDeclaration)
+            .find(j.ImportDefaultSpecifier)
+            .get()
+
+        return defaultImport.node.local.name
+    }
+    return null
 }
