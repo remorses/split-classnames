@@ -1,5 +1,6 @@
 {
   "private": true,
+  "name": "website",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -8,7 +9,7 @@
   "dependencies": {
     "classnames": "^2.3.1",
     "codemod-split-classnames": "workspace:^0.0.0",
-    "eslint-plugin-short-classnames": "workspace:^0.0.0",
+    "eslint-plugin-short-classnames": "workspace:^0.0.1",
     "eslint-config-next": "^12.0.4",
     "lodash": "^4.17.21",
     "next": "latest",
@@ -26,5 +27,6 @@
     "next-transpile-modules": "^9.0.0",
     "postcss": "^8.3.5",
     "tailwindcss": "^2.2.4"
-  }
+  },
+  "version": null
 }
