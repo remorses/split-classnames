@@ -12,6 +12,12 @@ const plugin = {
                 jsx: true,
             },
         },
+        config: {
+            plugins: ['short-classnames'],
+            rules: {
+                'short-classnames/short-classnames': 'error',
+            },
+        },
     },
 }
 export default plugin

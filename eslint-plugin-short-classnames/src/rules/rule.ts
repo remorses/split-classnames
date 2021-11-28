@@ -103,10 +103,12 @@ export function transformer(
     },
     {
         functionName,
+        maxClassNameCharacters = 60,
         skipImportDeclaration = false,
         ...options
     }: {
         functionName?: string
+        maxClassNameCharacters?: number
         skipImportDeclaration?: boolean
     },
 ) {
@@ -139,7 +141,10 @@ export function transformer(
                 const literal = j(path).find(j.Literal).get()
                 // const literal = path.value.
 
-                const splitted = splitClassNames(literal.value?.value)
+                const splitted = splitClassNames(
+                    literal.value?.value,
+                    maxClassNameCharacters,
+                )
                 if (!splitted) {
                     return
                 }
@@ -172,9 +177,10 @@ export function transformer(
                 shouldInsertCXImport = true
                 const literal = j(path).find(j.Literal).get()
 
-                const cxArguments = splitClassNames(literal.value?.value)?.map(
-                    (s) => j.literal(s),
-                )
+                const cxArguments = splitClassNames(
+                    literal.value?.value,
+                    maxClassNameCharacters,
+                )?.map((s) => j.literal(s))
                 if (!cxArguments) {
                     return
                 }
@@ -210,7 +216,10 @@ export function transformer(
                 let shouldReport = false
                 quasis.forEach((quasi, index) => {
                     if (quasi.value.raw.trim()) {
-                        const classNames = splitClassNames(quasi.value.raw)
+                        const classNames = splitClassNames(
+                            quasi.value.raw,
+                            maxClassNameCharacters,
+                        )
                         if (classNames) {
                             shouldReport = true
                             cxArguments.push(
@@ -257,9 +266,10 @@ export function transformer(
                 let shouldReport = false
                 callExpression.value.arguments.forEach((arg) => {
                     if (arg.type === 'Literal') {
-                        const newCxArguments = splitClassNames(arg.value)?.map(
-                            (s) => j.literal(s),
-                        )
+                        const newCxArguments = splitClassNames(
+                            arg.value,
+                            maxClassNameCharacters,
+                        )?.map((s) => j.literal(s))
                         if (newCxArguments) {
                             console.log(newCxArguments)
                             shouldReport = true
@@ -303,19 +313,12 @@ const meta: import('eslint').Rule.RuleMetaData = {
 
     fixable: 'code',
 
-    messages: {
-        useFunction:
-            'The className has more than {{ maxSpaceSeparetedClasses }} classes. Use {{ functionName }}() instead.',
-        avoidFunction:
-            'Do not use {{ functionName }}() when you have no greater than {{ maxSpaceSeparetedClasses }} classes.',
-    },
-
     schema: [
         {
             type: 'object',
             functionName: false,
             properties: {
-                maxSpaceSeparetedClasses: {
+                maxClassNameCharacters: {
                     type: 'number',
                 },
                 functionName: {

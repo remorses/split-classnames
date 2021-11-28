@@ -1,6 +1,6 @@
 {
     "extends": "next/core-web-vitals",
-    "plugins": ["short-classnames"],
+    "plugins": [],
     "rules": {
         "short-classnames/short-classnames": "error"
     }
