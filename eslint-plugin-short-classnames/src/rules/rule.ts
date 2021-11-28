@@ -40,11 +40,11 @@ function tailwindSort(a: string, b: string) {
 
 export function splitClassNames(
     className: string,
-    maxClassLength: number = 60,
+    maxClassLength: number = 40,
 ) {
     className = className.trim()
     if (className.length <= maxClassLength) {
-        return [className]
+        return null
     }
     const classes = className
         .split(/\s+/)
@@ -62,6 +62,10 @@ export function splitClassNames(
             lastAddedIndex = i + 1
             currentSize = 0
         }
+    }
+
+    if (classGroups.length <= 1) {
+        return null
     }
 
     return classGroups
@@ -152,7 +156,6 @@ export function transformer(
             functionName ||
             CLASSNAMES_IDENTIFIER_NAME
 
-
         let shouldInsertCXImport = false
 
         for (const classAttrName of classAttrNames) {
@@ -166,9 +169,11 @@ export function transformer(
                 const literal = j(path).find(j.Literal).get()
                 // const literal = path.value.
 
-                const cxArguments = splitClassNames(literal.value?.value).map(
-                    (s) => j.literal(s),
-                )
+                const splitted = splitClassNames(literal.value?.value)
+                if (!splitted) {
+                    return
+                }
+                const cxArguments = splitted.map((s) => j.literal(s))
                 // don't add the classnames if className attr is short enough
                 if (cxArguments.length <= 1) {
                     return
@@ -195,9 +200,12 @@ export function transformer(
                 shouldInsertCXImport = true
                 const literal = j(path).find(j.Literal).get()
 
-                const cxArguments = splitClassNames(literal.value?.value).map(
+                const cxArguments = splitClassNames(literal.value?.value)?.map(
                     (s) => j.literal(s),
                 )
+                if (!cxArguments) {
+                    return
+                }
                 report({
                     node: literal.node,
                     replaceWith: j.callExpression(
@@ -225,26 +233,34 @@ export function transformer(
                 const templateLiteral = j(path).find(j.TemplateLiteral).get()
                 const { quasis, expressions } = templateLiteral.node
                 let cxArguments: any[] = []
+                let shouldReport = false
                 quasis.forEach((quasi, index) => {
                     if (quasi.value.raw.trim()) {
                         const classNames = splitClassNames(quasi.value.raw)
-                        cxArguments.push(
-                            ...classNames.map((className) =>
-                                j.literal(className),
-                            ),
-                        )
+                        if (classNames) {
+                            shouldReport = true
+                            cxArguments.push(
+                                ...classNames.map((className) =>
+                                    j.literal(className),
+                                ),
+                            )
+                        } else {
+                            cxArguments.push(quasi.value)
+                        }
                     }
                     if (expressions[index] !== undefined) {
                         cxArguments.push(expressions[index])
                     }
                 })
-                report({
-                    node: templateLiteral.node,
-                    replaceWith: j.callExpression(
-                        j.identifier(classNamesImportName),
-                        cxArguments,
-                    ),
-                })
+                if (shouldReport) {
+                    report({
+                        node: templateLiteral.node,
+                        replaceWith: j.callExpression(
+                            j.identifier(classNamesImportName),
+                            cxArguments,
+                        ),
+                    })
+                }
             })
 
             // classnames arguments too long
@@ -262,32 +278,41 @@ export function transformer(
                 const callExpression = j(path).find(j.CallExpression).get()
                 const newArgs: any[] = []
                 const classNamesImportName = callExpression.value.callee.name
+                let shouldReport = false
                 callExpression.value.arguments.forEach((arg) => {
                     if (arg.type === 'Literal') {
-                        const newCxArguments = splitClassNames(arg.value).map(
+                        const newCxArguments = splitClassNames(arg.value)?.map(
                             (s) => j.literal(s),
                         )
-                        newArgs.push(...newCxArguments)
+                        if (newCxArguments) {
+                            console.log(newCxArguments)
+                            shouldReport = true
+                            newArgs.push(...newCxArguments)
+                        } else {
+                            newArgs.push(arg)
+                        }
                     } else {
                         newArgs.push(arg)
                     }
                 })
 
-                report({
-                    node: callExpression.node,
-                    replaceWith: j.callExpression(
-                        j.identifier(classNamesImportName),
-                        newArgs,
-                    ),
-                })
+                if (shouldReport) {
+                    report({
+                        node: callExpression.node,
+                        replaceWith: j.callExpression(
+                            j.identifier(classNamesImportName),
+                            newArgs,
+                        ),
+                    })
+                }
             })
         }
-        return
         if (
             !skipImportDeclaration &&
             !existingClassNamesImportIdentifier &&
             shouldInsertCXImport
         ) {
+            // TODO to add the clsx import i should do this inside the first report function, so this does not generate an additional error in eslint
             report({
                 node: findProgramNode(ast)?.value?.body?.[0],
                 insertBefore: createImportDeclaration(
@@ -366,10 +391,11 @@ export const rule: import('eslint').Rule.RuleModule = {
                     functionName: params.functionName || 'clsx',
                 },
 
-                *fix(fixer) {
+                fix(fixer) {
                     if (replaceWith) {
-                        const newSource = j(replaceWith as any).toSource()
-                        console.log({ newSource })
+                        const newSource = j(replaceWith as any).toSource({
+                            wrapColumn: 1000 * 10,
+                        })
                         return fixer.replaceText(node as any, newSource)
                     }
                     if (insertBefore) {
@@ -384,7 +410,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                 },
             })
         }
-        
+
         return {
             'Program:exit': function reportAndReset(node) {
                 const ast = context.getSourceCode().ast
@@ -394,38 +420,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                 const transformed = transformer(
                     {
                         source: clone(ast),
-                        report({
-                            replaceWith: replaceWith,
-                            insertBefore,
-                            node,
-                        }) {
-                            context.report({
-                                node: node as any,
-                                message:
-                                    'The className is too long. Use {{ functionName }}() instead.',
-                                data: {
-                                    functionName: params.functionName || 'clsx',
-                                },
-                                fix(fixer) {
-                                    if (replaceWith) {
-                                        return fixer.replaceText(
-                                            node as any,
-                                            j(replaceWith as any).toSource(),
-                                        )
-                                    }
-                                    if (insertBefore) {
-                                        return fixer.insertTextBefore(
-                                            node as any,
-                                            j(insertBefore as any).toSource() +
-                                                '\n',
-                                        )
-                                    }
-                                    throw new Error(
-                                        'Neither insertBefore of replaceWith passed',
-                                    )
-                                },
-                            })
-                        },
+                        report,
                     },
                     params,
                 )
