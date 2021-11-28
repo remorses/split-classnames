@@ -120,12 +120,7 @@ export const rule: import('eslint').Rule.RuleModule = {
         const { functionName, maxClassNameCharacters } = params
         let eslintAst
         let addedImport = false
-        function report({
-            replaceWith: replaceWith,
-            classNamesImportName,
-            shouldAddImport,
-            node,
-        }: ReportArg) {
+        function report({ replaceWith: replaceWith, node }: ReportArg) {
             context.report({
                 node: node as any,
                 message:
@@ -137,7 +132,8 @@ export const rule: import('eslint').Rule.RuleModule = {
                 *fix(fixer) {
                     if (
                         !addedImport &&
-                        shouldAddImport &&
+                        shouldInsertCXImport &&
+                        !existingClassNamesImportIdentifier &&
                         classNamesImportName
                     ) {
                         addedImport = true
@@ -157,210 +153,184 @@ export const rule: import('eslint').Rule.RuleModule = {
             })
         }
 
+        let existingClassNamesImportIdentifier: string
+        let classNamesImportName: string
+        let shouldInsertCXImport = false
+
         return {
+            Program: (program) => {
+                const ast = context.getSourceCode().ast
+            },
+            ImportDeclaration: (importDeclaration) => {
+                if (
+                    possibleClassNamesImportSources.has(
+                        importDeclaration.source?.value as string,
+                    )
+                ) {
+                    const defaultImport = j(importDeclaration as any)
+                        .find(j.ImportDefaultSpecifier)
+                        .get()
+                    existingClassNamesImportIdentifier =
+                        defaultImport.node.local.name
+                }
+            },
             JSXAttribute: function reportAndReset(node) {
+                classNamesImportName =
+                    existingClassNamesImportIdentifier ||
+                    functionName ||
+                    CLASSNAMES_IDENTIFIER_NAME
                 try {
-                    eslintAst = context.getSourceCode().ast
-
-                    let ast: Collection
-                    try {
-                        ast = j(eslintAst)
-                    } catch (e) {
-                        throw new Error(`Error parsing AST with j: ${e}`)
+                    if (
+                        node.name.name !== 'className' &&
+                        node.name.name !== 'class'
+                    ) {
+                        return
                     }
 
-                    const classAttrNames = ['className', 'class']
-                        .map((x) => x.trim())
-                        .filter(Boolean)
-                    // TODO getClassNamesIdentifierName should run on program ast
-                    const existingClassNamesImportIdentifier =
-                        getClassNamesIdentifierName(ast)
-                    const classNamesImportName =
-                        existingClassNamesImportIdentifier ||
-                        functionName ||
-                        CLASSNAMES_IDENTIFIER_NAME
+                    // simple literals or literals inside expressions
+                    if (node?.value?.type === 'Literal') {
+                        const literal = j(node).find(j.Literal).get()
+                        // const literal = path.value.
 
-                    let shouldInsertCXImport = false
-
-                    let shouldAddImport = () => {
-                        return (
-                            shouldInsertCXImport &&
-                            !existingClassNamesImportIdentifier
+                        const splitted = splitClassNames(
+                            literal.value?.value,
+                            maxClassNameCharacters,
                         )
-                    }
-                    for (const classAttrName of classAttrNames) {
-                        // simple literals or literals inside expressions
-                        ast.find(
-                            j.JSXAttribute,
-                            (attr: JSXAttribute) =>
-                                attr.name.name === classAttrName &&
-                                attr?.value?.type === 'Literal',
-                        ).forEach((path) => {
-                            const literal = j(path).find(j.Literal).get()
-                            // const literal = path.value.
+                        if (!splitted) {
+                            return
+                        }
+                        const cxArguments = splitted.map((s) => j.literal(s))
+                        // don't add the classnames if className attr is short enough
+                        if (cxArguments.length <= 1) {
+                            return
+                        }
+                        shouldInsertCXImport = true
+                        report({
+                            node: literal.node,
 
-                            const splitted = splitClassNames(
-                                literal.value?.value,
-                                maxClassNameCharacters,
-                            )
-                            if (!splitted) {
-                                return
-                            }
-                            const cxArguments = splitted.map((s) =>
-                                j.literal(s),
-                            )
-                            // don't add the classnames if className attr is short enough
-                            if (cxArguments.length <= 1) {
-                                return
-                            }
-                            shouldInsertCXImport = true
-                            report({
-                                node: literal.node,
-                                classNamesImportName,
-                                shouldAddImport: shouldAddImport(),
-                                replaceWith: j.jsxExpressionContainer(
-                                    j.callExpression(
-                                        j.identifier(classNamesImportName),
-                                        cxArguments,
-                                    ),
+                            replaceWith: j.jsxExpressionContainer(
+                                j.callExpression(
+                                    j.identifier(classNamesImportName),
+                                    cxArguments,
                                 ),
-                            })
+                            ),
                         })
-                        // string literal inside expressions
-                        ast.find(
-                            j.JSXAttribute,
-                            (attr: JSXAttribute) =>
-                                attr.name.name === classAttrName &&
-                                attr?.value?.type ===
-                                    'JSXExpressionContainer' &&
-                                attr?.value?.expression?.type === 'Literal',
-                        ).forEach((path) => {
-                            shouldInsertCXImport = true
-                            const literal = j(path).find(j.Literal).get()
+                    }
+                    // string literal inside expressions
+                    if (
+                        node?.value?.type === 'JSXExpressionContainer' &&
+                        node?.value?.expression?.type === 'Literal'
+                    ) {
+                        shouldInsertCXImport = true
+                        const literal = j(node).find(j.Literal).get()
 
-                            const cxArguments = splitClassNames(
-                                literal.value?.value,
-                                maxClassNameCharacters,
-                            )?.map((s) => j.literal(s))
-                            if (!cxArguments) {
-                                return
+                        const cxArguments = splitClassNames(
+                            literal.value?.value,
+                            maxClassNameCharacters,
+                        )?.map((s) => j.literal(s))
+                        if (!cxArguments) {
+                            return
+                        }
+                        report({
+                            node: literal.node,
+
+                            replaceWith: j.callExpression(
+                                j.identifier(classNamesImportName),
+                                cxArguments,
+                            ),
+                        })
+                    }
+
+                    // template literal
+
+                    if (
+                        node.value.type === 'JSXExpressionContainer' &&
+                        node.value.expression.type === 'TemplateLiteral'
+                    ) {
+                        shouldInsertCXImport = true
+                        const templateLiteral = j(node)
+                            .find(j.TemplateLiteral)
+                            .get()
+                        const { quasis, expressions } = templateLiteral.node
+                        let cxArguments: any[] = []
+                        let shouldReport = false
+                        quasis.forEach((quasi, index) => {
+                            if (quasi.value.raw.trim()) {
+                                const classNames = splitClassNames(
+                                    quasi.value.raw,
+                                    maxClassNameCharacters,
+                                )
+                                if (classNames) {
+                                    shouldReport = true
+                                    cxArguments.push(
+                                        ...classNames.map((className) =>
+                                            j.literal(className),
+                                        ),
+                                    )
+                                } else {
+                                    cxArguments.push(quasi.value)
+                                }
                             }
+                            if (expressions[index] !== undefined) {
+                                cxArguments.push(expressions[index])
+                            }
+                        })
+                        if (shouldReport) {
                             report({
-                                node: literal.node,
-                                classNamesImportName,
-                                shouldAddImport: shouldAddImport(),
+                                node: templateLiteral.node,
+
                                 replaceWith: j.callExpression(
                                     j.identifier(classNamesImportName),
                                     cxArguments,
                                 ),
                             })
-                        })
+                        }
+                    }
 
-                        // template literal
-                        ast.find(j.JSXAttribute, {
-                            type: 'JSXAttribute',
-                            name: {
-                                type: 'JSXIdentifier',
-                                name: classAttrName,
-                            },
-                            value: {
-                                type: 'JSXExpressionContainer',
-                                expression: {
-                                    type: 'TemplateLiteral',
-                                },
-                            },
-                        }).forEach((path) => {
-                            shouldInsertCXImport = true
-                            const templateLiteral = j(path)
-                                .find(j.TemplateLiteral)
-                                .get()
-                            const { quasis, expressions } = templateLiteral.node
-                            let cxArguments: any[] = []
-                            let shouldReport = false
-                            quasis.forEach((quasi, index) => {
-                                if (quasi.value.raw.trim()) {
-                                    const classNames = splitClassNames(
-                                        quasi.value.raw,
-                                        maxClassNameCharacters,
-                                    )
-                                    if (classNames) {
-                                        shouldReport = true
-                                        cxArguments.push(
-                                            ...classNames.map((className) =>
-                                                j.literal(className),
-                                            ),
-                                        )
-                                    } else {
-                                        cxArguments.push(quasi.value)
-                                    }
-                                }
-                                if (expressions[index] !== undefined) {
-                                    cxArguments.push(expressions[index])
-                                }
-                            })
-                            if (shouldReport) {
-                                report({
-                                    node: templateLiteral.node,
-                                    classNamesImportName,
-                                    shouldAddImport: shouldAddImport(),
-                                    replaceWith: j.callExpression(
-                                        j.identifier(classNamesImportName),
-                                        cxArguments,
-                                    ),
-                                })
-                            }
-                        })
+                    // classnames arguments too long
 
-                        // classnames arguments too long
-                        ast.find(
-                            j.JSXAttribute,
-                            (attr: JSXAttribute) =>
-                                attr.name.name === classAttrName &&
-                                attr?.value?.type ===
-                                    'JSXExpressionContainer' &&
-                                attr?.value?.expression?.type ===
-                                    'CallExpression' &&
-                                possibleClassNamesImportNames.has(
-                                    // @ts-ignore
-                                    attr?.value?.expression?.callee?.name,
-                                ),
-                        ).forEach((path) => {
-                            const callExpression = j(path)
-                                .find(j.CallExpression)
-                                .get()
-                            const newArgs: any[] = []
-                            const classNamesImportName =
-                                callExpression.value.callee.name
-                            let shouldReport = false
-                            callExpression.value.arguments.forEach((arg) => {
-                                if (arg.type === 'Literal') {
-                                    const newCxArguments = splitClassNames(
-                                        arg.value,
-                                        maxClassNameCharacters,
-                                    )?.map((s) => j.literal(s))
-                                    if (newCxArguments) {
-                                        shouldReport = true
-                                        newArgs.push(...newCxArguments)
-                                    } else {
-                                        newArgs.push(arg)
-                                    }
+                    if (
+                        node?.value?.type === 'JSXExpressionContainer' &&
+                        node?.value?.expression?.type === 'CallExpression' &&
+                        possibleClassNamesImportNames.has(
+                            // @ts-ignore
+                            node?.value?.expression?.callee?.name,
+                        )
+                    ) {
+                        const callExpression = j(node)
+                            .find(j.CallExpression)
+                            .get()
+                        const newArgs: any[] = []
+                        const classNamesImportName =
+                            callExpression.value.callee.name
+                        let shouldReport = false
+                        callExpression.value.arguments.forEach((arg) => {
+                            if (arg.type === 'Literal') {
+                                const newCxArguments = splitClassNames(
+                                    arg.value,
+                                    maxClassNameCharacters,
+                                )?.map((s) => j.literal(s))
+                                if (newCxArguments) {
+                                    shouldReport = true
+                                    newArgs.push(...newCxArguments)
                                 } else {
                                     newArgs.push(arg)
                                 }
-                            })
-
-                            if (shouldReport) {
-                                report({
-                                    node: callExpression.node,
-                                    classNamesImportName,
-                                    shouldAddImport: shouldAddImport(),
-                                    replaceWith: j.callExpression(
-                                        j.identifier(classNamesImportName),
-                                        newArgs,
-                                    ),
-                                })
+                            } else {
+                                newArgs.push(arg)
                             }
                         })
+
+                        if (shouldReport) {
+                            report({
+                                node: callExpression.node,
+
+                                replaceWith: j.callExpression(
+                                    j.identifier(classNamesImportName),
+                                    newArgs,
+                                ),
+                            })
+                        }
                     }
                 } catch (e) {
                     throw new Error(`could not report for class names, ` + e)
@@ -372,8 +342,6 @@ export const rule: import('eslint').Rule.RuleModule = {
 
 interface ReportArg {
     node: import('ast-types').ASTNode
-    classNamesImportName
-    shouldAddImport: boolean
     replaceWith?: import('ast-types').ASTNode
 }
 
@@ -391,23 +359,4 @@ function findProgramNode(root): any {
     })
 
     return result
-}
-
-const getClassNamesIdentifierName = (ast) => {
-    const importDeclarations = ast.find(
-        j.ImportDeclaration,
-        (node: ImportDeclaration) =>
-            node.type === 'ImportDeclaration' &&
-            possibleClassNamesImportSources.has(node.source?.value as string),
-    )
-
-    if (importDeclarations.length >= 1) {
-        const importDeclaration = importDeclarations.get()
-        const defaultImport = j(importDeclaration)
-            .find(j.ImportDefaultSpecifier)
-            .get()
-
-        return defaultImport.node.local.name
-    }
-    return null
 }
