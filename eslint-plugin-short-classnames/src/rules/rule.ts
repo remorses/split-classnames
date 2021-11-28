@@ -116,7 +116,6 @@ export function transformer(
         const classAttrNames = ['className', 'class']
             .map((x) => x.trim())
             .filter(Boolean)
-
         const existingClassNamesImportIdentifier =
             getClassNamesIdentifierName(ast)
         const classNamesImportName =
@@ -126,6 +125,9 @@ export function transformer(
 
         let shouldInsertCXImport = false
 
+        let shouldAddImport = () => {
+            return shouldInsertCXImport && !existingClassNamesImportIdentifier
+        }
         for (const classAttrName of classAttrNames) {
             // simple literals or literals inside expressions
             ast.find(
@@ -150,6 +152,7 @@ export function transformer(
                 report({
                     node: literal.node,
                     classNamesImportName,
+                    shouldAddImport: shouldAddImport(),
                     replaceWith: j.jsxExpressionContainer(
                         j.callExpression(
                             j.identifier(classNamesImportName),
@@ -178,6 +181,7 @@ export function transformer(
                 report({
                     node: literal.node,
                     classNamesImportName,
+                    shouldAddImport: shouldAddImport(),
                     replaceWith: j.callExpression(
                         j.identifier(classNamesImportName),
                         cxArguments,
@@ -226,6 +230,7 @@ export function transformer(
                     report({
                         node: templateLiteral.node,
                         classNamesImportName,
+                        shouldAddImport: shouldAddImport(),
                         replaceWith: j.callExpression(
                             j.identifier(classNamesImportName),
                             cxArguments,
@@ -271,6 +276,7 @@ export function transformer(
                     report({
                         node: callExpression.node,
                         classNamesImportName,
+                        shouldAddImport: shouldAddImport(),
                         replaceWith: j.callExpression(
                             j.identifier(classNamesImportName),
                             newArgs,
@@ -279,20 +285,6 @@ export function transformer(
                 }
             })
         }
-        if (
-            !skipImportDeclaration &&
-            !existingClassNamesImportIdentifier &&
-            shouldInsertCXImport
-        ) {
-            // TODO to add the clsx import i should do this inside the first report function, so this does not generate an additional error in eslint
-            // findProgramNode(ast)?.value?.body?.unshift(
-            //     createImportDeclaration(
-            //         classNamesImportName,
-            //         CLASSNAMES_IMPORT_SOURCE,
-            //     ),
-            // )
-        }
-        return ast.toSource({ ...options, parser: 'tsx' })
     } catch (e) {
         console.error(e)
         throw e
@@ -339,10 +331,11 @@ export const rule: import('eslint').Rule.RuleModule = {
     create(context) {
         const [params = {}] = context.options
         let ast
-        let fixCount = 0
+        let addedImport = false
         function report({
             replaceWith: replaceWith,
             classNamesImportName,
+            shouldAddImport,
             node,
         }: ReportArg) {
             context.report({
@@ -354,13 +347,18 @@ export const rule: import('eslint').Rule.RuleModule = {
                 },
 
                 *fix(fixer) {
-                    if (!fixCount) {
+                    if (
+                        !addedImport &&
+                        shouldAddImport &&
+                        classNamesImportName
+                    ) {
+                        addedImport = true
+
                         yield fixer.insertTextBefore(
                             findProgramNode(j(ast))?.value?.body?.[0],
                             `import ${classNamesImportName} from '${CLASSNAMES_IMPORT_SOURCE}'\n`,
                         )
                     }
-                    fixCount += 1
                     if (replaceWith) {
                         const newSource = j(replaceWith as any).toSource({
                             wrapColumn: 1000 * 10,
@@ -393,6 +391,7 @@ export const rule: import('eslint').Rule.RuleModule = {
 interface ReportArg {
     node: import('ast-types').ASTNode
     classNamesImportName
+    shouldAddImport: boolean
     replaceWith?: import('ast-types').ASTNode
 }
 
