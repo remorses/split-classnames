@@ -40,7 +40,7 @@ function tailwindSort(a: string, b: string) {
 
 export function splitClassNames(
     className: string,
-    maxClassLength: number = 40,
+    maxClassLength: number = 60,
 ) {
     className = className.trim()
     if (className.length <= maxClassLength) {
@@ -99,11 +99,7 @@ export function transformer(
         report,
     }: {
         source: any
-        report: (x: {
-            node: import('ast-types').ASTNode
-            replaceWith?: import('ast-types').ASTNode
-            insertBefore?: import('ast-types').ASTNode
-        }) => void
+        report: (x: ReportArg) => void
     },
     {
         functionName,
@@ -115,13 +111,6 @@ export function transformer(
     },
 ) {
     try {
-        function createImportDeclaration(identifierName, source) {
-            return j.importDeclaration(
-                [j.importDefaultSpecifier(j.identifier(identifierName))],
-                j.literal(source),
-            )
-        }
-
         const getClassNamesIdentifierName = (ast) => {
             const importDeclarations = ast.find(
                 j.ImportDeclaration,
@@ -181,6 +170,7 @@ export function transformer(
                 shouldInsertCXImport = true
                 report({
                     node: literal.node,
+                    classNamesImportName,
                     replaceWith: j.jsxExpressionContainer(
                         j.callExpression(
                             j.identifier(classNamesImportName),
@@ -208,6 +198,7 @@ export function transformer(
                 }
                 report({
                     node: literal.node,
+                    classNamesImportName,
                     replaceWith: j.callExpression(
                         j.identifier(classNamesImportName),
                         cxArguments,
@@ -255,6 +246,7 @@ export function transformer(
                 if (shouldReport) {
                     report({
                         node: templateLiteral.node,
+                        classNamesImportName,
                         replaceWith: j.callExpression(
                             j.identifier(classNamesImportName),
                             cxArguments,
@@ -299,6 +291,7 @@ export function transformer(
                 if (shouldReport) {
                     report({
                         node: callExpression.node,
+                        classNamesImportName,
                         replaceWith: j.callExpression(
                             j.identifier(classNamesImportName),
                             newArgs,
@@ -313,13 +306,6 @@ export function transformer(
             shouldInsertCXImport
         ) {
             // TODO to add the clsx import i should do this inside the first report function, so this does not generate an additional error in eslint
-            report({
-                node: findProgramNode(ast)?.value?.body?.[0],
-                insertBefore: createImportDeclaration(
-                    classNamesImportName,
-                    CLASSNAMES_IMPORT_SOURCE,
-                ),
-            })
             // findProgramNode(ast)?.value?.body?.unshift(
             //     createImportDeclaration(
             //         classNamesImportName,
@@ -373,16 +359,13 @@ export const rule: import('eslint').Rule.RuleModule = {
     meta,
     create(context) {
         const [params = {}] = context.options
-
+        let ast
+        let fixCount = 0
         function report({
             replaceWith: replaceWith,
-            insertBefore,
+            classNamesImportName,
             node,
-        }: {
-            node: import('ast-types').ASTNode
-            replaceWith?: import('ast-types').ASTNode
-            insertBefore?: import('ast-types').ASTNode
-        }) {
+        }: ReportArg) {
             context.report({
                 node: node as any,
                 message:
@@ -391,29 +374,27 @@ export const rule: import('eslint').Rule.RuleModule = {
                     functionName: params.functionName || 'clsx',
                 },
 
-                fix(fixer) {
+                *fix(fixer) {
+                    if (!fixCount) {
+                        yield fixer.insertTextBefore(
+                            findProgramNode(j(ast))?.value?.body?.[0],
+                            `import ${classNamesImportName} from '${CLASSNAMES_IMPORT_SOURCE}'\n`,
+                        )
+                    }
+                    fixCount += 1
                     if (replaceWith) {
                         const newSource = j(replaceWith as any).toSource({
                             wrapColumn: 1000 * 10,
                         })
-                        return fixer.replaceText(node as any, newSource)
+                        yield fixer.replaceText(node as any, newSource)
                     }
-                    if (insertBefore) {
-                        return fixer.insertTextBefore(
-                            node as any,
-                            j(insertBefore as any).toSource() + '\n',
-                        )
-                    }
-                    throw new Error(
-                        'Neither insertBefore of replaceWith passed',
-                    )
                 },
             })
         }
 
         return {
             'Program:exit': function reportAndReset(node) {
-                const ast = context.getSourceCode().ast
+                ast = context.getSourceCode().ast
 
                 console.log(findProgramNode(j(ast as any)).body)
 
@@ -428,6 +409,12 @@ export const rule: import('eslint').Rule.RuleModule = {
             },
         }
     },
+}
+
+interface ReportArg {
+    node: import('ast-types').ASTNode
+    classNamesImportName
+    replaceWith?: import('ast-types').ASTNode
 }
 
 function findProgramNode(root): any {
