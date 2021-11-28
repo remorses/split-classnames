@@ -1,0 +1,40 @@
+{
+    "name": "eslint-plugin-short-classnames",
+    "version": "0.0.0",
+    "description": "Eslint plugin to keep className attributes short and readable",
+    "main": "dist/index.js",
+    "sideEffects": false,
+    "types": "dist/index.d.ts",
+    "repository": "https://github.com/remorses/",
+    "scripts": {
+        "build": "tsc",
+        "play": "./bin.js",
+        "watch": "tsc -w"
+    },
+    "files": [
+        "dist",
+        "src",
+        "esm"
+    ],
+    "keywords": [
+        "eslint",
+        "eslintplugin",
+        "classname"
+    ],
+    "author": "Tommaso De Rossi, morse <beats.by.morse@gmail.com>",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/eslint": "^8.2.0",
+        "eslint": "^8.3.0",
+        "estree-jsx": "^0.0.1",
+        "jscodeshift": "^0.13.0"
+    },
+    "peerDependencies": {
+        "eslint": "^8.3.0"
+    },
+    "dependencies": {
+        "ast-types": "^0.14.2",
+        "astring": "^1.8.1",
+        "clone": "^2.1.2"
+    }
+}

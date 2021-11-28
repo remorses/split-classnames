@@ -1,0 +1,60 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test eslint valid: fixed 1`] = `
+"
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={clsx(
+    \\"block w-full py-2 mt-8 text-sm font-semibold text-center text-white\\",
+    \\"bg-gray-900 border border-black rounded-md w-[340px] disabled:opacity-60\\",
+    \\"hover:cursor-pointer disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]\\"
+)}
+                />
+            </Fragment>
+        )
+    }
+    "
+`;
+
+exports[`test eslint withImports: fixed 1`] = `
+"
+    import { Fragment } from 'react'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={clsx(
+    \\"block w-full py-2 mt-8 text-sm font-semibold text-center text-white\\",
+    \\"bg-gray-900 border border-black rounded-md w-[340px] disabled:opacity-60\\",
+    \\"hover:cursor-pointer disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]\\"
+)}
+                />
+            </Fragment>
+        )
+    }
+    "
+`;
+
+exports[`test eslint withManyClassnames: fixed 1`] = `
+"
+    function Component() {
+        return (
+            <Fragment>
+                <p className={clsx(
+    \\"block w-full py-2 mt-8 text-sm font-semibold text-center text-white\\",
+    \\"bg-gray-900 border border-black rounded-md w-[340px] disabled:opacity-60\\",
+    \\"hover:cursor-pointer disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]\\"
+)} />
+ {clsx(
+    \\"block w-full py-2 mt-8 text-sm font-semibold text-center text-white\\",
+    \\"bg-gray-900 border border-black rounded-md w-[340px] disabled:opacity-60\\",
+    \\"hover:cursor-pointer disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]\\"
+)}pointer disabled:opacity-60' />
+            </Fragment>
+        )
+    }
+    
+    "
+`;

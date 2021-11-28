@@ -1,4 +1,5 @@
 packages:
   - codemod
   - website
+  - eslint-plugin-short-classnames
   - vscode-extension
