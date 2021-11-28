@@ -1,5 +1,11 @@
 # eslint-plugin-short-classnames
 
+## 0.0.3
+
+### Patch Changes
+
+-   Fix typescript support, using jscodeshift minimally
+
 ## 0.0.2
 
 ### Patch Changes
