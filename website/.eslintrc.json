@@ -1,7 +1,13 @@
 {
-    "extends": "next/core-web-vitals",
-    "plugins": [],
+    "extends": ["next/core-web-vitals"],
+    "plugins": ["short-classnames"],
     "rules": {
-        "short-classnames/short-classnames": "error"
+        "short-classnames/short-classnames": [
+            "error",
+            {
+                "maxClassNameCharacters": 10,
+                "functionName": "cs"
+            }
+        ]
     }
 }

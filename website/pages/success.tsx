@@ -10,26 +10,26 @@ import { CodeEditor } from '@app/components/CodeEditor'
 export default function Success({ licenseKey }) {
     const router = useRouter()
     return (
-        <div className='flex flex-col text-gray-200 items-center py-2 w-full'>
+        <div className='flex flex-col items-center w-full py-2 text-gray-200'>
             <WavesBg top={400} />
             <div className='!pt-24 max-w-screen-2xl flex flex-col mx-auto w-full px-8 min-h-screen'>
-                <section className='relative flex flex-col space-y-6 items-center'>
-                    <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-8 md:mb-12'>
+                <section className='relative flex flex-col items-center space-y-6'>
+                    <h1 className='mb-8 text-4xl font-bold sm:text-5xl md:text-6xl md:mb-12'>
                         Thank you for purchasing!
                     </h1>
-                    <p className='mx-auto max-w-xl leading-relaxed'>
+                    <p className='max-w-xl mx-auto leading-relaxed'>
                         You can now download the vscode extension{' '}
                         <Link className='underline' href=''>
                             here
                         </Link>
                     </p>
-                    <p className='mx-auto max-w-xl leading-relaxed'>
+                    <p className='max-w-xl mx-auto leading-relaxed'>
                         Your license key is:{' '}
-                        <span className='ml-3 font-mono px-2 py-2 rounded-sm text-sm bg-gray-300 text-gray-800 font-bold'>
+                        <span className='px-2 py-2 ml-3 font-mono text-sm font-bold text-gray-800 bg-gray-300 rounded-sm'>
                             {licenseKey}
                         </span>
                     </p>
-                    <p className='mx-auto max-w-xl text-sm opacity-60 font-medium leading-relaxed'>
+                    <p className='max-w-xl mx-auto text-sm font-medium leading-relaxed opacity-60'>
                         A copy of your license key has also been sent to the
                         email you used on Gumroad
                     </p>

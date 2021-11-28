@@ -271,7 +271,6 @@ export function transformer(
                             maxClassNameCharacters,
                         )?.map((s) => j.literal(s))
                         if (newCxArguments) {
-                            console.log(newCxArguments)
                             shouldReport = true
                             newArgs.push(...newCxArguments)
                         } else {
@@ -302,7 +301,7 @@ export function transformer(
 }
 
 const meta: import('eslint').Rule.RuleMetaData = {
-    type: 'suggestion',
+    type: 'problem',
 
     docs: {
         description: 'suggest using className() or clsx() in JSX className',
@@ -376,8 +375,6 @@ export const rule: import('eslint').Rule.RuleModule = {
             'Program:exit': function reportAndReset(node) {
                 ast = context.getSourceCode().ast
 
-                console.log(findProgramNode(j(ast as any)).body)
-
                 const transformed = transformer(
                     {
                         source: clone(ast),
@@ -385,7 +382,6 @@ export const rule: import('eslint').Rule.RuleModule = {
                     },
                     params,
                 )
-                // console.log(transformed)
             },
         }
     },
