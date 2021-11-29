@@ -47,6 +47,19 @@ const tests = {
         )
     }
     `,
+    callArgumentTooLong: `
+    import { Fragment } from 'react'
+    import cs from 'classnames'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold text-center text-white', true ? 'hello' : 'hi', 'something else')}
+                />
+            </Fragment>
+        )
+    }
+    `,
 }
 
 describe('test eslint', () => {

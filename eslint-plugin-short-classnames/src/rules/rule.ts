@@ -321,6 +321,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                                     newArgs.push(arg)
                                 }
                             } else {
+                                // TODO maybe support template literals in function arguments
                                 newArgs.push(arg)
                             }
                         })
