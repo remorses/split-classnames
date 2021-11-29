@@ -1,5 +1,11 @@
 # eslint-plugin-short-classnames
 
+## 0.0.4
+
+### Patch Changes
+
+-   Fixed template literals case
+
 ## 0.0.3
 
 ### Patch Changes
