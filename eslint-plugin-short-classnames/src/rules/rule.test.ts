@@ -60,6 +60,19 @@ const tests = {
         )
     }
     `,
+    withCsImport: `
+    import { Fragment } from 'react'
+    import cs from 'classnames'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={'color classe foo something py-2 mt-8 text-sm font-semibold text-center text-white'}
+                />
+            </Fragment>
+        )
+    }
+    `,
 }
 
 describe('test eslint', () => {

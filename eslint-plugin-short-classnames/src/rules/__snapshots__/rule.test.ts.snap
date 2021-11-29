@@ -31,6 +31,22 @@ exports[`test eslint simple: fixed 1`] = `
     "
 `;
 
+exports[`test eslint withCsImport: fixed 1`] = `
+"
+    import { Fragment } from 'react'
+    import cs from 'classnames'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={cs('color classe foo something py-2 mt-8', 'text-sm font-semibold text-center', 'text-white')}
+                />
+            </Fragment>
+        )
+    }
+    "
+`;
+
 exports[`test eslint withImports: fixed 1`] = `
 "import clsx from 'classnames'
 
