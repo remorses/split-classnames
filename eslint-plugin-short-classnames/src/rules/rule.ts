@@ -169,6 +169,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                         importDeclaration.source?.value as string,
                     )
                 ) {
+                    // TODO check instead if there is already a variable called clsx or cs, ...
                     const defaultImport = j(importDeclaration as any)
                         .find(j.ImportDefaultSpecifier)
                         .get()

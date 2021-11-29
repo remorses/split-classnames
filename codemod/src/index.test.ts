@@ -58,7 +58,7 @@ test('splitClassNames sorts classes for tailwind', () => {
     )
 })
 
-test('regex', () => {
+test.skip('regex', () => {
     for (let testName of fs.readdirSync(path.join(__dirname, 'examples'))) {
         const testFile = path.resolve(__dirname, 'examples', testName)
         const source = fs.readFileSync(testFile, 'utf8').toString()
@@ -68,7 +68,7 @@ test('regex', () => {
         for (let res of results) {
             newSource = replaceRange(newSource, res.start, res.end, res.str)
         }
-        expect(newSource).toMatchSnapshot('regex ' + testName )
+        expect(newSource).toMatchSnapshot('regex ' + testName)
     }
 })
 function replaceRange(s, start, end, substitute) {
