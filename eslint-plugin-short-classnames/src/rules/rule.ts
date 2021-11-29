@@ -78,7 +78,6 @@ const possibleClassNamesImportSources = new Set([
     'classcat',
 ])
 
-
 // TODO custom function import source
 const CLASSNAMES_IMPORT_SOURCE = 'classnames'
 
@@ -148,6 +147,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                     if (replaceWith) {
                         const newSource = j(replaceWith as any).toSource({
                             wrapColumn: 1000 * 10,
+                            quote: 'single',
                         })
                         yield fixer.replaceText(node as any, newSource)
                     }
@@ -270,7 +270,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                                         ),
                                     )
                                 } else {
-                                    cxArguments.push(quasi.value)
+                                    cxArguments.push(j.literal(quasi.value.raw))
                                 }
                             }
                             if (expressions[index] !== undefined) {
@@ -279,11 +279,13 @@ export const rule: import('eslint').Rule.RuleModule = {
                         })
                         if (shouldReport) {
                             report({
-                                node: templateLiteral.node,
+                                node: node.value,
 
-                                replaceWith: j.callExpression(
-                                    j.identifier(classNamesImportName),
-                                    cxArguments,
+                                replaceWith: j.jsxExpressionContainer(
+                                    j.callExpression(
+                                        j.identifier(classNamesImportName),
+                                        cxArguments,
+                                    ),
                                 ),
                             })
                         }

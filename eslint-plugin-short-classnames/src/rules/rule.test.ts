@@ -1,7 +1,7 @@
 import { ESLint, RuleTester } from 'eslint'
 
 const tests = {
-    valid: `
+    simple: `
     function Component() {
         return (
             <Fragment>
@@ -35,6 +35,18 @@ const tests = {
         )
     }
     `,
+    withTemplateLiteral: `
+    import { Fragment } from 'react'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={\`color classe foo \${true ? 'hello' : 'hi'} something py-2 mt-8 text-sm font-semibold text-center text-white\`}
+                />
+            </Fragment>
+        )
+    }
+    `,
 }
 
 describe('test eslint', () => {
@@ -42,7 +54,10 @@ describe('test eslint', () => {
         overrideConfig: {
             plugins: ['short-classnames'],
             rules: {
-                'short-classnames/short-classnames': 'error',
+                'short-classnames/short-classnames': [
+                    'error',
+                    { maxClassNameCharacters: 30 },
+                ],
             },
             parserOptions: {
                 ecmaVersion: 2018,
@@ -56,20 +71,24 @@ describe('test eslint', () => {
     for (let testName in tests) {
         test(`${testName}`, async () => {
             const code = tests[testName]
-
+            console.log('code', code)
             const result = await eslint.lintText(code, { filePath: 'test.js' })
 
             // expect(result).toMatchSnapshot()
             if (result[0]?.messages.length > 0) {
                 let fixedCode = result[0].source
+                let incrementRanges = 0
                 for (let message of result[0].messages) {
                     if (message.fix) {
                         fixedCode = replaceRange(
                             fixedCode,
-                            message.fix.range[0],
-                            message.fix.range[1],
+                            message.fix.range[0] + incrementRanges,
+                            message.fix.range[1] + incrementRanges,
                             message.fix.text,
                         )
+                        incrementRanges +=
+                            message.fix.text.length -
+                            (message.fix.range[1] - message.fix.range[0])
                     }
                 }
                 console.log(fixedCode)
