@@ -297,7 +297,6 @@ export const rule: import('eslint').Rule.RuleModule = {
                         node?.value?.type === 'JSXExpressionContainer' &&
                         node?.value?.expression?.type === 'CallExpression' &&
                         possibleClassNamesImportNames.has(
-                            // @ts-ignore
                             node?.value?.expression?.callee?.name,
                         )
                     ) {
