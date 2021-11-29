@@ -4,6 +4,8 @@ const j: JSCodeshift = _jscodeshift.withParser('tsx')
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
+
+// TODO make a sorter that does not sort based on chars length but instead creates groups, like group for md, lg, base, dark, hover, ...
 function tailwindSort(a: string, b: string) {
     // a before b
     if (b.includes(':')) {
