@@ -89,7 +89,7 @@ importers:
       codemod-split-classnames: workspace:^0.0.0
       eslint: <8.0.0
       eslint-config-next: ^12.0.4
-      eslint-plugin-short-classnames: workspace:^0.0.3
+      eslint-plugin-short-classnames: workspace:^0.0.4
       lodash: ^4.17.21
       next: latest
       next-transpile-modules: ^9.0.0
