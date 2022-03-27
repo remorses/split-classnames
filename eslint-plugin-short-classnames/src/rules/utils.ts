@@ -1,16 +1,20 @@
 import { ESLint } from 'eslint'
+import { Opts } from './rule'
 
 let eslint: ESLint
-export async function runRule(code: string) {
+export async function runRule(code: string, options: Opts = {}) {
     if (!eslint) {
         eslint = new ESLint({
+            rulePaths: [__dirname],
+            // resolvePluginsRelativeTo: __dirname,
             overrideConfig: {
-                plugins: ['short-classnames'],
+                // plugins: [require.resolve('../index')],
                 parser: '@typescript-eslint/parser',
+
                 rules: {
                     'short-classnames/short-classnames': [
                         'error',
-                        { maxClassNameCharacters: 30 },
+                        { ...options },
                     ],
                 },
                 parserOptions: {

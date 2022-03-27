@@ -4,7 +4,6 @@ const j: JSCodeshift = _jscodeshift.withParser('tsx')
 
 const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
 
-
 // TODO make a sorter that does not sort based on chars length but instead creates groups, like group for md, lg, base, dark, hover, ...
 function tailwindSort(a: string, b: string) {
     // a before b
@@ -109,6 +108,11 @@ const meta: import('eslint').Rule.RuleMetaData = {
             },
         },
     ],
+}
+
+export type Opts = {
+    maxClassNameCharacters?: number
+    functionName?: string
 }
 
 export const rule: import('eslint').Rule.RuleModule = {

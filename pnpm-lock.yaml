@@ -46,13 +46,19 @@ importers:
       '@types/eslint': ^8.2.0
       '@typescript-eslint/parser': ^5.16.0
       ast-types: ^0.14.2
+      cac: ^6.7.12
       eslint: ^8.3.0
       estree-jsx: ^0.0.1
       jscodeshift: ^0.13.0
+      smart-glob: ^1.0.2
+      yargs: ^17.2.1
     dependencies:
       '@typescript-eslint/parser': 5.16.0_eslint@8.3.0+typescript@4.4.4
       ast-types: 0.14.2
+      cac: 6.7.12
       jscodeshift: 0.13.0
+      smart-glob: 1.0.2
+      yargs: 17.2.1
     devDependencies:
       '@types/eslint': 8.2.0
       eslint: 8.3.0
@@ -2281,6 +2287,11 @@ packages:
   /bytes/3.1.0:
     resolution: {integrity: sha512-zauLjrfCG+xvoyaqLoV8bLVXXNGC4JqlxFCutSDWA6fJrTo2ZuvLYTqZ7aHBLZSMOopbzwv8f+wZcVzfVTI2Dg==}
     engines: {node: '>= 0.8'}
+
+  /cac/6.7.12:
+    resolution: {integrity: sha512-rM7E2ygtMkJqD9c7WnFU6fruFcN3xe4FM5yUmgxhZzIKJk4uHl9U/fhwdajGFQbQuv43FAUo1Fe8gX/oIKDeSA==}
+    engines: {node: '>=8'}
+    dev: false
 
   /cache-base/1.0.1:
     resolution: {integrity: sha512-AKcdTnFSWATd5/GCPRxr2ChwIJ85CeyrEyjRHlKxQ56d4XJMGym0uAiKn0xbLOGOl3+yRpOTi484dVCEc5AUzQ==}

@@ -10,7 +10,7 @@
     "scripts": {
         "build": "tsc",
         "test": "NODE_ENV=test jest",
-        "play": "./bin.js",
+        "play": "esno src/cli",
         "watch": "tsc -w"
     },
     "files": [
@@ -37,6 +37,9 @@
     "dependencies": {
         "@typescript-eslint/parser": "^5.16.0",
         "ast-types": "^0.14.2",
-        "jscodeshift": "^0.13.0"
+        "cac": "^6.7.12",
+        "jscodeshift": "^0.13.0",
+        "smart-glob": "^1.0.2",
+        "yargs": "^17.2.1"
     }
 }
