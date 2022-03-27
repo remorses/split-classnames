@@ -6,12 +6,15 @@
     "sideEffects": false,
     "types": "dist/index.d.ts",
     "repository": "https://github.com/remorses/",
+    "bin": "bin.js",
     "scripts": {
         "build": "tsc",
+        "test": "NODE_ENV=test jest",
         "play": "./bin.js",
         "watch": "tsc -w"
     },
     "files": [
+        "bin.js",
         "dist",
         "src",
         "esm"
@@ -32,8 +35,8 @@
         "eslint": "^8.3.0"
     },
     "dependencies": {
+        "@typescript-eslint/parser": "^5.16.0",
         "ast-types": "^0.14.2",
         "jscodeshift": "^0.13.0"
     }
 }
-
