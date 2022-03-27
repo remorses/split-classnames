@@ -23,7 +23,7 @@ export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
             continue
         }
         const ext = path.extname(file)
-        console.info(`=> ${dryRun ? 'Processing' : 'Applying to'} [${file}]`)
+        console.info(`=> ${dryRun ? 'Found' : 'Applying to'} [${file}]`)
         source = (await runRule(source, {})) || source
         results.push(source)
         if (!dryRun) {
