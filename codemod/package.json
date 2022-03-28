@@ -6,7 +6,7 @@
     "sideEffects": false,
     "module": "esm/index.js",
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/remorses/",
+    "repository": "https://github.com/remorses/split-classnames",
     "scripts": {
         "build": "tsc && tsc -m es6 --outDir esm",
         "play": "./bin.js",

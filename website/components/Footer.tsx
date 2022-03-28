@@ -24,7 +24,7 @@ export function Footer({
         ],
         'Who made this?': [
             <Link href='https://twitter.com/__morse'>Twitter</Link>,
-            <Link href='https://github.com/remorses/'>Github</Link>,
+            <Link href='https://github.com/remorses/split-classnames'>Github</Link>,
         ],
     },
     justifyAround = false,
