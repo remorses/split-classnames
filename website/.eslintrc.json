@@ -1,8 +1,8 @@
 {
     "extends": ["next/core-web-vitals"],
-    "plugins": ["short-classnames"],
+    "plugins": ["split-classnames"],
     "rules": {
-        "short-classnames/short-classnames": [
+        "split-classnames/split-classnames": [
             "error",
             {
                 "maxClassNameCharacters": 10,

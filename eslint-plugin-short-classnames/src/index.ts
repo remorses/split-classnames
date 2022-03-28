@@ -4,7 +4,7 @@ import { rule } from './rules/rule'
 
 const plugin = {
     rules: {
-        'short-classnames': rule,
+        'split-classnames': rule,
     },
 
     configs: {
@@ -14,9 +14,9 @@ const plugin = {
             },
         },
         config: {
-            plugins: ['short-classnames'],
+            plugins: ['split-classnames'],
             rules: {
-                'short-classnames/short-classnames': 'error',
+                'split-classnames/split-classnames': 'error',
             },
         },
     },

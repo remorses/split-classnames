@@ -12,7 +12,7 @@ export async function runRule(code: string, options: Opts = {}) {
                 parser: '@typescript-eslint/parser',
 
                 rules: {
-                    'short-classnames/short-classnames': [
+                    'split-classnames/split-classnames': [
                         'error',
                         { ...options },
                     ],

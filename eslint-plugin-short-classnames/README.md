@@ -3,7 +3,7 @@
 Install the plugin with
 
 ```
-npm i -D eslint-plugin-short-classnames
+npm i -D eslint-plugin-split-classnames
 ```
 
 ## Eslint config
@@ -12,9 +12,9 @@ Add the following code into your `.eslintrc.json` config
 
 ```json
 {
-    "plugins": ["short-classnames"],
+    "plugins": ["split-classnames"],
     "rules": {
-        "short-classnames/short-classnames": [
+        "split-classnames/split-classnames": [
             "error",
             {
                 "maxClassNameCharacters": 60,

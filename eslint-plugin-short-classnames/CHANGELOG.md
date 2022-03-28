@@ -1,4 +1,4 @@
-# eslint-plugin-short-classnames
+# eslint-plugin-split-classnames
 
 ## 0.0.4
 
