@@ -8,7 +8,7 @@ exports[`test eslint callArgumentTooLong: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={cs('color classe foo something py-2 mt-8', 'text-sm font-semibold text-center', 'text-white', true ? 'hello' : 'hi', 'something else')}
+                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold', 'text-center text-white', true ? 'hello' : 'hi', 'something else')}
                 />
             </Fragment>
         )
@@ -23,7 +23,7 @@ exports[`test eslint simple: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold', 'text-center text-white bg-gray-900', 'border border-black rounded-md w-[340px]', 'disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700', 'sm:h-[60em]')}
+                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold text-center', 'text-white bg-gray-900 border border-black rounded-md', 'w-[340px] disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]')}
                 />
             </Fragment>
         )
@@ -39,7 +39,7 @@ exports[`test eslint withCsImport: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={cs('color classe foo something py-2 mt-8', 'text-sm font-semibold text-center', 'text-white')}
+                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold', 'text-center text-white')}
                 />
             </Fragment>
         )
@@ -55,7 +55,7 @@ exports[`test eslint withImports: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold', 'text-center text-white bg-gray-900', 'border border-black rounded-md w-[340px]', 'disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700', 'sm:h-[60em]')}
+                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold text-center', 'text-white bg-gray-900 border border-black rounded-md', 'w-[340px] disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]')}
                 />
             </Fragment>
         )
@@ -69,8 +69,8 @@ exports[`test eslint withManyClassnames: fixed 1`] = `
     function Component() {
         return (
             <Fragment>
-                <p className={clsx('block w-full py-2 mt-8 text-sm font-semibold', 'text-center text-white bg-gray-900', 'border border-black rounded-md w-[340px]', 'disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700', 'sm:h-[60em]')} />
-                <p className={clsx('block w-full py-2 mt-8 text-sm font-semibold', 'text-center text-white bg-gray-900', 'border border-black rounded-md w-[340px]', 'disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700', 'sm:h-[60em]')} />
+                <p className={clsx('block w-full py-2 mt-8 text-sm font-semibold text-center', 'text-white bg-gray-900 border border-black rounded-md', 'w-[340px] disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]')} />
+                <p className={clsx('block w-full py-2 mt-8 text-sm font-semibold text-center', 'text-white bg-gray-900 border border-black rounded-md', 'w-[340px] disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]')} />
             </Fragment>
         )
     }
@@ -86,7 +86,7 @@ exports[`test eslint withTemplateLiteral: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={clsx('color classe foo ', true ? 'hello' : 'hi', 'something py-2 mt-8 text-sm font-semibold', 'text-center text-white')}
+                    className={clsx('color classe foo ', true ? 'hello' : 'hi', 'something py-2 mt-8 text-sm font-semibold text-center', 'text-white')}
                 />
             </Fragment>
         )
@@ -101,7 +101,7 @@ exports[`test eslint withTypescript: fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold', 'text-center text-white bg-gray-900', 'border border-black rounded-md w-[340px]', 'disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700', 'sm:h-[60em]')}
+                    className={clsx('block w-full py-2 mt-8 text-sm font-semibold text-center', 'text-white bg-gray-900 border border-black rounded-md', 'w-[340px] disabled:opacity-60 hover:cursor-pointer', 'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]')}
                 />
             </Fragment>
         )

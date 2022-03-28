@@ -119,7 +119,7 @@ export const rule: import('eslint').Rule.RuleModule = {
     meta,
     create(context) {
         const [params = {}] = context.options
-        const { functionName, maxClassNameCharacters } = params
+        const { functionName, maxClassNameCharacters = 40 } = params
         let addedImport = false
         function report({
             replaceWith: replaceWith,
