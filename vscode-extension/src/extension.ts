@@ -2,7 +2,6 @@ import * as vscode from 'vscode'
 import Conf from 'conf'
 import fetch from 'node-fetch'
 
-import { transformSource } from 'codemod-split-classnames'
 const config = vscode.workspace.getConfiguration()
 
 const SPLIT_CLASSNAMES_COMMAND = 'vscode-extension.splitClassNames'
@@ -147,3 +146,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 export function deactivate() {}
+
+function transformSource(...args) {
+    return ''
+}
