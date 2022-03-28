@@ -2,7 +2,7 @@ import fs from 'fs'
 import path from 'path'
 import { glob as globFn } from 'smart-glob'
 import { runRule } from 'eslint-plugin-split-classnames/dist/utils'
-import { Opts } from 'eslint-plugin-split-classnames/dist/rule.js'
+import { Opts } from 'eslint-plugin-split-classnames/dist/rule'
 
 import cac from 'cac'
 
