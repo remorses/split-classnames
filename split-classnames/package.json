@@ -15,8 +15,7 @@
     "files": [
         "bin.js",
         "dist",
-        "src",
-        "esm"
+        "src"
     ],
     "keywords": [
         "eslint",
