@@ -1,8 +1,6 @@
 <div align='center'>
     <br/>
     <br/>
-    <img src='' width='320px'>
-    <br/>
     <h1></h1>
     <p>Splits long classNames making them more readable</p>
     <br/>
