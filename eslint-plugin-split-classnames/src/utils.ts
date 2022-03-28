@@ -5,10 +5,9 @@ let eslint: ESLint
 export async function runRule(code: string, options: Opts = {}) {
     if (!eslint) {
         eslint = new ESLint({
-            rulePaths: [__dirname],
             // resolvePluginsRelativeTo: __dirname,
             overrideConfig: {
-                // plugins: [require.resolve('../index')],
+                plugins: ['split-classnames'],
                 parser: '@typescript-eslint/parser',
 
                 rules: {
