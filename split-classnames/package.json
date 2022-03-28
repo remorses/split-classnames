@@ -10,7 +10,7 @@
     "scripts": {
         "build": "tsc",
         "test": "NODE_ENV=test jest",
-        "play": "esno src/cli",
+        "play": "./bin.js",
         "watch": "tsc -w"
     },
     "files": [
