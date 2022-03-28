@@ -1,9 +1,8 @@
-import yargs, { CommandModule } from 'yargs'
 import fs from 'fs'
 import path from 'path'
 import { glob as globFn } from 'smart-glob'
-import { runRule } from './rules/utils'
-import { Opts } from './rules/rule'
+import { runRule } from 'eslint-plugin-split-classnames/dist/utils'
+import { Opts } from 'eslint-plugin-split-classnames/dist/rule.js'
 
 import cac from 'cac'
 

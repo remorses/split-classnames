@@ -1,6 +1,6 @@
 import { Rule } from 'eslint'
 import path from 'path'
-import { rule } from './rules/rule'
+import { rule } from './rule'
 
 const plugin = {
     rules: {

@@ -1,11 +1,12 @@
 {
-    "name": "eslint-plugin-split-classnames",
-    "version": "0.0.4",
-    "description": "Eslint plugin to keep className attributes short and readable",
+    "name": "split-classnames",
+    "version": "0.0.0",
+    "description": "Split classnames in your jsx files to make them shorter and more readable",
     "main": "dist/index.js",
     "sideEffects": false,
     "types": "dist/index.d.ts",
     "repository": "https://github.com/remorses/",
+    "bin": "bin.js",
     "scripts": {
         "build": "tsc",
         "test": "NODE_ENV=test jest",
@@ -13,6 +14,7 @@
         "watch": "tsc -w"
     },
     "files": [
+        "bin.js",
         "dist",
         "src",
         "esm"
@@ -26,14 +28,13 @@
     "license": "ISC",
     "devDependencies": {
         "@types/eslint": "^8.2.0",
-        "eslint": "^8.3.0",
         "estree-jsx": "^0.0.1"
     },
-    "peerDependencies": {
-        "eslint": "^8.3.0"
-    },
     "dependencies": {
-        "ast-types": "^0.14.2",
-        "jscodeshift": "^0.13.0"
+        "@typescript-eslint/parser": "^5.16.0",
+        "cac": "^6.7.12",
+        "eslint-plugin-split-classnames": "*",
+        "eslint": "^8.3.0",
+        "smart-glob": "^1.0.2"
     }
 }

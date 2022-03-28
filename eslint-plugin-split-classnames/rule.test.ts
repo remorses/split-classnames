@@ -1,5 +1,5 @@
 import { ESLint, RuleTester } from 'eslint'
-import { runRule } from './utils'
+import { runRule } from './src/utils'
 
 const tests = {
     simple: `
