@@ -6,6 +6,9 @@ export async function runRule(code: string, options: Opts = {}) {
     if (!eslint) {
         eslint = new ESLint({
             // resolvePluginsRelativeTo: __dirname,
+            baseConfig: {},
+            allowInlineConfig: true,
+
             overrideConfig: {
                 plugins: ['split-classnames'],
                 parser: '@typescript-eslint/parser',

@@ -1,5 +1,4 @@
 packages:
-  - codemod
   - website
   - eslint-plugin-split-classnames
   - vscode-extension

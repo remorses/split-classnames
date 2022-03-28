@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import throttle from 'lodash/throttle'
-import { transformSource as ssrTransformSource } from 'codemod-split-classnames/src'
+import { runRule as ssrTransformSource } from 'eslint-plugin-split-classnames/dist/utils'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Script from 'next/script'
 import gradientBg from '../public/bg_gradient.svg'
@@ -40,7 +40,7 @@ export default function Home({ transformedCode }) {
 
 export const getStaticProps: GetStaticProps = async function getStaticProps() {
     try {
-        const transformedCode = ssrTransformSource(CODE_BEFORE, {})
+        const transformedCode = await ssrTransformSource(CODE_BEFORE, {})
         return {
             props: {
                 transformedCode,
@@ -186,15 +186,15 @@ function CodeComparison({ transformedCode }) {
 
     const transformSource = useRef<Function>()
 
-    useEffect(() => {
-        try {
-            import('codemod-split-classnames/src').then(
-                (m) => (transformSource.current = m.transformSource),
-            )
-        } catch (e) {
-            console.error('error importing transform', e)
-        }
-    }, [])
+    // useEffect(() => {
+    //     try {
+    //         import('eslint-plugin-split-classnames/dist/utils').then(
+    //             (m) => (transformSource.current = m.runRule),
+    //         )
+    //     } catch (e) {
+    //         console.error('error importing transform', e)
+    //     }
+    // }, [])
     function safeTransformSource(code = '') {
         try {
             if (!transformSource.current) {

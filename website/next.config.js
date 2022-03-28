@@ -1,4 +1,4 @@
-const withTM = require('next-transpile-modules')(['codemod-split-classnames'])
+const withTM = require('next-transpile-modules')([])
 
 /** @type {import('next').NextConfig} */
 const config = {

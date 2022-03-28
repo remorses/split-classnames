@@ -26,21 +26,6 @@ importers:
       typescript: 4.4.4
       ultra-runner: 3.10.5
 
-  codemod:
-    specifiers:
-      '@types/jscodeshift': ^0.11.2
-      jscodeshift: ^0.13.0
-      micro-memoize: ^4.0.9
-      smart-glob: ^1.0.2
-      yargs: ^17.2.1
-    dependencies:
-      jscodeshift: 0.13.0
-      micro-memoize: 4.0.9
-      smart-glob: 1.0.2
-      yargs: 17.2.1
-    devDependencies:
-      '@types/jscodeshift': 0.11.2
-
   eslint-plugin-split-classnames:
     specifiers:
       '@types/eslint': ^8.2.0
@@ -82,7 +67,6 @@ importers:
       '@types/node': 14.17.27
       '@types/vscode': ^1.61.0
       '@vscode/test-electron': ^1.6.2
-      codemod-split-classnames: workspace:^0.0.0
       conf: ^10.0.3
       glob: ^7.1.7
       mocha: ^9.1.3
@@ -94,7 +78,6 @@ importers:
       '@types/node': 14.17.27
       '@types/vscode': 1.61.0
       '@vscode/test-electron': 1.6.2
-      codemod-split-classnames: link:../codemod
       conf: 10.0.3
       glob: 7.2.0
       mocha: 9.1.3
@@ -107,7 +90,6 @@ importers:
       '@types/react': ^17.0.33
       autoprefixer: ^10.2.6
       classnames: ^2.3.1
-      codemod-split-classnames: workspace:^0.0.0
       eslint: <8.0.0
       eslint-config-next: ^12.0.4
       eslint-plugin-split-classnames: workspace:^0.0.4
@@ -120,10 +102,10 @@ importers:
       react: ^17.0.2
       react-dom: ^17.0.2
       react-simple-code-editor: ^0.11.0
+      split-classnames: workspace:^0.0.0
       tailwindcss: ^2.2.4
     dependencies:
       classnames: 2.3.1
-      codemod-split-classnames: link:../codemod
       eslint-config-next: 12.0.4_b6cc576955a2f9845c0ad0dfccaf6d07
       eslint-plugin-split-classnames: link:../eslint-plugin-split-classnames
       lodash: 4.17.21
@@ -133,6 +115,7 @@ importers:
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       react-simple-code-editor: 0.11.0_react-dom@17.0.2+react@17.0.2
+      split-classnames: link:../split-classnames
     devDependencies:
       '@types/prismjs': 1.16.6
       '@types/react': 17.0.33
@@ -1340,13 +1323,6 @@ packages:
       pretty-format: 27.3.1
     dev: true
 
-  /@types/jscodeshift/0.11.2:
-    resolution: {integrity: sha512-CwgUni90VW+H3xc9Hekz/+ShEKPTvYbgVsDWCV4YksKoTKrWu9qfPpNaf7VDvbwjRp+PlkBJ7wZJNDpILzRiRw==}
-    dependencies:
-      ast-types: 0.14.2
-      recast: 0.20.5
-    dev: true
-
   /@types/json-schema/7.0.9:
     resolution: {integrity: sha512-qcUXuemtEu+E5wZSJHNxUXeCZhAfXKQ41D+duX+VYPde7xyEVZci+/oXKJL13tnRs9lR2pr4fod59GT6/X1/yQ==}
     dev: true
@@ -1818,6 +1794,7 @@ packages:
     engines: {node: '>=4'}
     dependencies:
       tslib: 2.1.0
+    dev: false
 
   /astral-regex/2.0.0:
     resolution: {integrity: sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==}
@@ -5373,6 +5350,7 @@ packages:
 
   /micro-memoize/4.0.9:
     resolution: {integrity: sha512-Z2uZi/IUMGQDCXASdujXRqrXXEwSY0XffUrAOllhqzQI3wpUyZbiZTiE2JuYC0HSG2G7DbCS5jZmsEKEGZuemg==}
+    dev: true
 
   /micromatch/3.1.10:
     resolution: {integrity: sha512-MWikgl9n9M3w+bpsY3He8L+w9eF9338xRl8IAO5viDizwSzziFEyUzo2xrrloB64ADbTf8uA8vRqqttDTOmccg==}
@@ -6272,6 +6250,7 @@ packages:
       esprima: 4.0.1
       source-map: 0.6.1
       tslib: 2.1.0
+    dev: false
 
   /redent/3.0.0:
     resolution: {integrity: sha512-6tDA8g98We0zd0GvVeMT9arEOnTw9qM03L9cJXaCjrip1OO764RDBLBfrB4cwzNGDj5OA5ioymC9GkizgWJDUg==}
@@ -7550,19 +7529,6 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
-
-  /yargs/17.2.1:
-    resolution: {integrity: sha512-XfR8du6ua4K6uLGm5S6fA+FIJom/MdJcFNVY8geLlp2v8GYbOXD4EB1tPNZsRn4vBzKGMgb5DRZMeWuFc2GO8Q==}
-    engines: {node: '>=12'}
-    dependencies:
-      cliui: 7.0.4
-      escalade: 3.1.1
-      get-caller-file: 2.0.5
-      require-directory: 2.1.1
-      string-width: 4.2.3
-      y18n: 5.0.8
-      yargs-parser: 20.2.9
-    dev: false
 
   /yocto-queue/0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
