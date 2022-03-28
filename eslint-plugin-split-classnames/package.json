@@ -14,8 +14,7 @@
     },
     "files": [
         "dist",
-        "src",
-        "esm"
+        "src"
     ],
     "keywords": [
         "eslint",
@@ -30,7 +29,7 @@
         "estree-jsx": "^0.0.1"
     },
     "peerDependencies": {
-        "eslint": "^8.3.0"
+        "eslint": "*"
     },
     "dependencies": {
         "ast-types": "^0.14.2",
