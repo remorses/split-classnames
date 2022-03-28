@@ -4,7 +4,7 @@
     <img src='' width='320px'>
     <br/>
     <h1></h1>
-    <p>Splits long className attributes into shorter calls to `classnames`</p>
+    <p>Splits long classNames making them more readable</p>
     <br/>
     <br/>
 </div>
