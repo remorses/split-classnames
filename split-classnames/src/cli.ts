@@ -8,10 +8,13 @@ import cac from 'cac'
 
 const cli = cac(require('../package.json').name)
 
+const allowedExtensions = ['.ts', '.tsx', '.js', '.jsx']
+
 export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
     const files = await globFn(glob, {
         absolute: true,
         gitignore: true,
+
         ignoreGlobs: ['**/node_modules/**', '**/dist/**'],
     })
 
@@ -19,6 +22,9 @@ export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
     for (let file of files) {
         let source = (await fs.promises.readFile(file)).toString()
         if (file.endsWith('.d.ts')) {
+            continue
+        }
+        if (!allowedExtensions.some((ext) => file.endsWith(ext))) {
             continue
         }
         const ext = path.extname(file)
