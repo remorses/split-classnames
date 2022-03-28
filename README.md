@@ -1,6 +1,6 @@
 <div align='center'>
     <br/>
-    <h3>Splits long classNames making them more readable</h3>
+    <h3>Splits long className attributes to make them more readable</h3>
     <br/>
     <br/>
 </div>
