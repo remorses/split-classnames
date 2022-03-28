@@ -11,6 +11,8 @@
 
 ## Example
 
+The following code
+
 ```tsx
 function Component() {
     return (
@@ -41,9 +43,50 @@ function Component() {
 }
 ```
 
+## Usage as a cli
+
+```sh
+npm i -g split-classnames
+# split classnames on all js files in the src directory
+split-classnames --dry --max 30 'src/**'
+```
+
+## Usage as an eslint plugin
+
+Install the plugin:
+
+```sh
+npm i -D eslint-plugin-split-classnames
+```
+
+Add the plugin to your eslint config:
+
+```json
+// .eslintrc.json
+{
+    "plugins": ["split-classnames"],
+    "rules": {
+        "split-classnames/split-classnames": [
+            "error",
+            {
+                "maxClassNameCharacters": 10,
+                "functionName": "cs"
+            }
+        ]
+    }
+}
+```
+
+Then run eslint with `--fix` to split long classnames
+
+```sh
+eslint --fix ./src
+```
+
 ## Features
 
--   Works on simple string literals (`className='something'`)
+-   Works bot on typescript and javascript jsx
+-   Works on string literals (`className='something'`)
 -   Works on template literals (`className={`something ${anotherClass}`}`)
 -   Works on existing classnames calls (`className={clsx('very long classNames are slitted in groups')}`)
--   Sorts the classes for tailwind (variants are put last)
+-   Sorts the classes for tailwind (variants like `sm:` and `lg:` are put last)

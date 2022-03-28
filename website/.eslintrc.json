@@ -5,8 +5,8 @@
         "split-classnames/split-classnames": [
             "error",
             {
-                "maxClassNameCharacters": 10,
-                "functionName": "cs"
+                "maxClassNameCharacters": 30,
+                "functionName": "classnames"
             }
         ]
     }

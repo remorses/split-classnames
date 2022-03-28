@@ -170,12 +170,12 @@ export const rule: import('eslint').Rule.RuleModule = {
                 const ast = context.getSourceCode().ast
             },
             ImportDeclaration: (importDeclaration) => {
+                // check if user has already imported the classnames function
                 if (
                     possibleClassNamesImportSources.has(
                         importDeclaration.source?.value as string,
                     )
                 ) {
-                    // TODO check instead if there is already a variable called clsx or cs, ...
                     const defaultImport = j(importDeclaration as any)
                         .find(j.ImportDefaultSpecifier)
                         .get()
