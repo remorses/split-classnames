@@ -29,7 +29,7 @@ export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
         }
         const ext = path.extname(file)
         console.info(`=> ${dryRun ? 'Found' : 'Applying to'} [${file}]`)
-        source = (await runRule(source, {})) || source
+        source = (await runRule(source, opts)) || source
         results.push(source)
         if (!dryRun) {
             await fs.promises.writeFile(file, source, { encoding: 'utf-8' })
@@ -43,7 +43,6 @@ cli.command('[glob]', 'Split long classnames')
         type: ['boolean'],
     })
     .option('--max', 'Max number of characters in a classname')
-
     .action((glob, args) => {
         // console.log(args)
 
