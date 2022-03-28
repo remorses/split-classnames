@@ -1,7 +1,5 @@
 <div align='center'>
     <br/>
-    <br/>
-    <h1></h1>
     <h3>Splits long classNames making them more readable</h3>
     <br/>
     <br/>
