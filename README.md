@@ -67,7 +67,7 @@ Add the plugin to your eslint config:
             "error",
             {
                 "maxClassNameCharacters": 40,
-                "functionName": "cs"
+                "functionName": "classnames"
             }
         ]
     }
