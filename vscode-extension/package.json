@@ -1,5 +1,6 @@
 {
     "name": "vscode-extension",
+    "private": true,
     "displayName": "vscode-extension",
     "description": "",
     "version": "0.0.1",
