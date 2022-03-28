@@ -4,7 +4,7 @@
     "description": "Split classnames in your jsx files to make them shorter and more readable",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/remorses/split-classnames",
+    "repository": "remorses/split-classnames",
     "bin": "bin.js",
     "scripts": {
         "build": "tsc",

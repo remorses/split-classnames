@@ -5,7 +5,7 @@
     "main": "dist/index.js",
     "sideEffects": false,
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/remorses/split-classnames",
+    "repository": "remorses/split-classnames",
     "scripts": {
         "build": "tsc",
         "test": "NODE_ENV=test jest",
