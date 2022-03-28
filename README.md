@@ -5,6 +5,8 @@
     <br/>
 </div>
 
+Subscribe to my [Newsletter](https://xmorse.xyz) if you want to get notified about other cool projects and updates.
+
 ## Example
 
 The following code
