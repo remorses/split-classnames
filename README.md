@@ -66,7 +66,7 @@ Add the plugin to your eslint config:
         "split-classnames/split-classnames": [
             "error",
             {
-                "maxClassNameCharacters": 10,
+                "maxClassNameCharacters": 40,
                 "functionName": "cs"
             }
         ]
