@@ -9,7 +9,7 @@
     "scripts": {
         "build": "tsc",
         "test": "NODE_ENV=test jest",
-        "play": "./bin.js 'example/**'",
+        "play": "./bin.js 'example/output**'",
         "watch": "tsc -w"
     },
     "files": [
