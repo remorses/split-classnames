@@ -15,7 +15,7 @@ export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
         absolute: true,
         gitignore: true,
 
-        ignoreGlobs: ['**/node_modules/**', '**/dist/**'],
+        ignoreGlobs: ['**/node_modules/**'],
     })
 
     const results: string[] = []
