@@ -37,9 +37,6 @@
     "dependencies": {
         "@typescript-eslint/parser": "^5.16.0",
         "ast-types": "^0.14.2",
-        "cac": "^6.7.12",
-        "jscodeshift": "^0.13.0",
-        "smart-glob": "^1.0.2",
-        "yargs": "^17.2.1"
+        "jscodeshift": "^0.13.0"
     }
 }

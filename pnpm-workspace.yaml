@@ -3,3 +3,4 @@ packages:
   - website
   - eslint-plugin-split-classnames
   - vscode-extension
+  - split-classnames
