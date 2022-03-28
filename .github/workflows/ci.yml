@@ -2,8 +2,8 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
 
 jobs:
   build:
@@ -39,11 +39,11 @@ jobs:
       - run: pnpm i
       - run: yarn build
       - run: yarn test
-      - name: Create Release
-        id: changesets
-        uses: changesets/action@master
-        # with:
-        #   publish: yarn release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # - name: Create Release
+      #   id: changesets
+      #   uses: changesets/action@master
+      #   # with:
+      #   #   publish: yarn release
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
