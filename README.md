@@ -2,7 +2,7 @@
     <br/>
     <br/>
     <h1></h1>
-    <p>Splits long classNames making them more readable</p>
+    <h3>Splits long classNames making them more readable</h3>
     <br/>
     <br/>
 </div>
