@@ -69,7 +69,9 @@ Add the plugin to your eslint config:
             "error",
             {
                 "maxClassNameCharacters": 40,
-                "functionName": "classnames"
+                "functionName": "classnames",
+                // customize your import statement
+                "importStatement": "import { cx } from '@/utils'",
             }
         ]
     }
