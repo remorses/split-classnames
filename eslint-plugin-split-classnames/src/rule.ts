@@ -149,12 +149,14 @@ export const rule: import('eslint').Rule.RuleModule = {
                     ) {
                         addedImport = true
 
-                        if (importStatement) {
-                            yield fixer.insertTextBeforeRange(
-                                [0, 0],
-                                `${importStatement}\n`,
-                            )
-                        }
+                        const importText = importStatement ?
+                            `${importStatement}\n` :
+                            `import ${classNamesImportName} from '${CLASSNAMES_IMPORT_SOURCE}'\n`
+
+                        yield fixer.insertTextBeforeRange(
+                            [0, 0],
+                            importText,
+                        )
                     }
                     if (replaceWith) {
                         const newSource = j(replaceWith as any).toSource({
