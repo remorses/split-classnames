@@ -115,9 +115,11 @@ describe('test eslint', () => {
             const code = tests[testName]
             console.log('code', code)
             let fixedCode = await runRule(code)
-            // fixedCode = prettier.format(fiexedCode, {
-            //     singleQuote: true,
-            // })
+            fixedCode =
+                fixedCode &&
+                prettier.format(fixedCode, {
+                    singleQuote: true,
+                })
             console.log(fixedCode)
 
             expect(fixedCode).toMatchSnapshot('fixed')
