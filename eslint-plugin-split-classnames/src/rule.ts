@@ -299,7 +299,7 @@ export const rule: import('eslint').Rule.RuleModule = {
                     }
 
                     // classnames arguments too long
-
+                    // regroups together classnames literal arguments and splits them in groups of maxClassNameCharacters, (reordered using tailwindSort)
                     if (
                         node?.value?.type === 'JSXExpressionContainer' &&
                         node?.value?.expression?.type === 'CallExpression' &&
