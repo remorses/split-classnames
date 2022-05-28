@@ -37,13 +37,13 @@ jobs:
           run_install: false
       # scripts
       - run: pnpm i --store-dir ~/.pnpm-store
-      - run: yarn build
-      - run: yarn test
+      - run: pnpm build
+      - run: pnpm test
       # - name: Create Release
       #   id: changesets
       #   uses: changesets/action@master
       #   # with:
-      #   #   publish: yarn release
+      #   #   publish: pnpm release
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

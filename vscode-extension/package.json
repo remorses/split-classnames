@@ -51,11 +51,11 @@
         ]
     },
     "scripts": {
-        "vscode:prepublish": "yarn run build",
+        "vscode:prepublish": "pnpm run build",
         "build": "esno scripts/build",
         "watch": "WATCH=1 esno scripts/build",
         "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/../codemod",
-        "pretest": "yarn run build"
+        "pretest": "pnpm run build"
     },
     "devDependencies": {
         "@types/glob": "^7.1.4",

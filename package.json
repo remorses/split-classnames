@@ -6,7 +6,7 @@
         "watch": "ultra -r watch",
         "build": "ultra --build -r build",
         "play": "esno eslint-plugin-split-classnames/src/cli",
-        "release": "yarn build && changeset publish"
+        "release": "pnpm build && changeset publish"
     },
     "devDependencies": {
         "@changesets/cli": "^2.17.0",
