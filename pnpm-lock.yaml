@@ -42,6 +42,7 @@ importers:
   split-classnames:
     specifiers:
       '@types/eslint': ^8.2.0
+      '@types/prettier': ^2.6.3
       '@typescript-eslint/parser': ^5.16.0
       cac: ^6.7.12
       eslint: ^8.3.0
@@ -56,6 +57,7 @@ importers:
       smart-glob: 1.0.2
     devDependencies:
       '@types/eslint': 8.2.0
+      '@types/prettier': 2.6.3
       estree-jsx: 0.0.1
 
   vscode-extension:
@@ -1017,6 +1019,10 @@ packages:
 
   /@types/parse-json/4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
+    dev: true
+
+  /@types/prettier/2.6.3:
+    resolution: {integrity: sha512-ymZk3LEC/fsut+/Q5qejp6R9O1rMxz3XaRHDV6kX8MrGAhOSPqVARbDi+EZvInBpw+BnCX3TD240byVkOfQsHg==}
     dev: true
 
   /@types/prismjs/1.16.6:

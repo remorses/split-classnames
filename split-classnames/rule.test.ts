@@ -86,14 +86,38 @@ const tests = {
         )
     }
     `,
+    alreadySplitted: `
+    import { Fragment } from 'react'
+    import cs from 'classnames'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={cs(
+                        'color classe foo something py-2 mt-8 text-sm font-semibold',
+                        'text-center text-white',
+                        true ? 'hello' : 'hi',
+                        'something else',
+                        'wow so many',
+                    )}
+                />
+            </Fragment>
+        )
+    }
+    `,
 }
+
+import prettier from 'prettier'
 
 describe('test eslint', () => {
     for (let testName in tests) {
         test(`${testName}`, async () => {
             const code = tests[testName]
             console.log('code', code)
-            const fixedCode = await runRule(code)
+            let fixedCode = await runRule(code)
+            // fixedCode = prettier.format(fiexedCode, {
+            //     singleQuote: true,
+            // })
             console.log(fixedCode)
 
             expect(fixedCode).toMatchSnapshot('fixed')

@@ -1,5 +1,21 @@
 // Vitest Snapshot v1
 
+exports[`test eslint > alreadySplitted > fixed 1`] = `
+"
+    import { Fragment } from 'react'
+    import cs from 'classnames'
+    function Component() {
+        return (
+            <Fragment>
+                <p
+                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold', 'text-center text-white something else wow so many', true ? 'hello' : 'hi')}
+                />
+            </Fragment>
+        )
+    }
+    "
+`;
+
 exports[`test eslint > callArgumentTooLong > fixed 1`] = `
 "
     import { Fragment } from 'react'
@@ -8,7 +24,7 @@ exports[`test eslint > callArgumentTooLong > fixed 1`] = `
         return (
             <Fragment>
                 <p
-                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold', 'text-center text-white', true ? 'hello' : 'hi', 'something else')}
+                    className={cs('color classe foo something py-2 mt-8 text-sm font-semibold', 'text-center text-white something else', true ? 'hello' : 'hi')}
                 />
             </Fragment>
         )

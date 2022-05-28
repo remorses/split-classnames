@@ -26,13 +26,14 @@
     "license": "ISC",
     "devDependencies": {
         "@types/eslint": "^8.2.0",
+        "@types/prettier": "^2.6.3",
         "estree-jsx": "^0.0.1"
     },
     "dependencies": {
         "@typescript-eslint/parser": "^5.16.0",
         "cac": "^6.7.12",
-        "eslint-plugin-split-classnames": "*",
         "eslint": "^8.3.0",
+        "eslint-plugin-split-classnames": "*",
         "smart-glob": "^1.0.2"
     }
 }

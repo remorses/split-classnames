@@ -310,32 +310,31 @@ export const rule: import('eslint').Rule.RuleModule = {
                         const callExpression = j(node)
                             .find(j.CallExpression)
                             .get()
-                        const newArgs: any[] = []
+
                         const classNamesImportName =
                             callExpression.value.callee.name
-                        let shouldReport = false
+                        let literalParts: string[] = []
+                        let nonLiteralParts: string[] = []
                         callExpression.value.arguments.forEach((arg) => {
                             if (arg.type === 'Literal') {
-                                const newCxArguments = splitClassNames(
-                                    arg.value,
-                                    maxClassNameCharacters,
-                                )?.map((s) => j.literal(s))
-                                if (newCxArguments) {
-                                    shouldReport = true
-                                    newArgs.push(...newCxArguments)
-                                } else {
-                                    newArgs.push(arg)
-                                }
+                                literalParts.push(arg.value)
                             } else {
                                 // TODO maybe support template literals in function arguments
-                                newArgs.push(arg)
+                                nonLiteralParts.push(arg)
                             }
                         })
+                        const splitted = splitClassNames(
+                            literalParts.join(' '),
+                            maxClassNameCharacters,
+                        )?.map((s) => j.literal(s))
 
-                        if (shouldReport) {
+                        if (splitted) {
+                            const newArgs: any[] = [
+                                ...splitted,
+                                ...nonLiteralParts,
+                            ]
                             report({
                                 node: callExpression.node,
-
                                 replaceWith: j.callExpression(
                                     j.identifier(classNamesImportName),
                                     newArgs,
