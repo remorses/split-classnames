@@ -55,8 +55,7 @@
         "build": "esno scripts/build",
         "watch": "WATCH=1 esno scripts/build",
         "play": "code --extensionDevelopmentPath=`pwd` -n `pwd`/../codemod",
-        "pretest": "yarn run build",
-        "test": "node ./dist/test/runTest.js"
+        "pretest": "yarn run build"
     },
     "devDependencies": {
         "@types/glob": "^7.1.4",
