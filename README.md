@@ -88,4 +88,5 @@ eslint --fix ./src
 -   Works on string literals (`className='something'`)
 -   Works on template literals (`className={`something ${anotherClass}`}`)
 -   Works on existing classnames calls (`className={clsx('very long classNames are slitted in groups')}`)
+-   Regroups already existing classnames calls
 -   Sorts the classes for tailwind (variants like `sm:` and `lg:` are put last)
