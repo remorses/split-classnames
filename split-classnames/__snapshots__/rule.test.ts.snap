@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1
 
-exports[`test eslint callArgumentTooLong: fixed 1`] = `
+exports[`test eslint > callArgumentTooLong > fixed 1`] = `
 "
     import { Fragment } from 'react'
     import cs from 'classnames'
@@ -16,7 +16,7 @@ exports[`test eslint callArgumentTooLong: fixed 1`] = `
     "
 `;
 
-exports[`test eslint simple: fixed 1`] = `
+exports[`test eslint > simple > fixed 1`] = `
 "import clsx from 'classnames'
 
     function Component() {
@@ -31,7 +31,7 @@ exports[`test eslint simple: fixed 1`] = `
     "
 `;
 
-exports[`test eslint withCsImport: fixed 1`] = `
+exports[`test eslint > withCsImport > fixed 1`] = `
 "
     import { Fragment } from 'react'
     import cs from 'classnames'
@@ -47,7 +47,7 @@ exports[`test eslint withCsImport: fixed 1`] = `
     "
 `;
 
-exports[`test eslint withImports: fixed 1`] = `
+exports[`test eslint > withImports > fixed 1`] = `
 "import clsx from 'classnames'
 
     import { Fragment } from 'react'
@@ -63,7 +63,7 @@ exports[`test eslint withImports: fixed 1`] = `
     "
 `;
 
-exports[`test eslint withManyClassnames: fixed 1`] = `
+exports[`test eslint > withManyClassnames > fixed 1`] = `
 "import clsx from 'classnames'
 
     function Component() {
@@ -78,7 +78,7 @@ exports[`test eslint withManyClassnames: fixed 1`] = `
     "
 `;
 
-exports[`test eslint withTemplateLiteral: fixed 1`] = `
+exports[`test eslint > withTemplateLiteral > fixed 1`] = `
 "import clsx from 'classnames'
 
     import { Fragment } from 'react'
@@ -94,7 +94,7 @@ exports[`test eslint withTemplateLiteral: fixed 1`] = `
     "
 `;
 
-exports[`test eslint withTypescript: fixed 1`] = `
+exports[`test eslint > withTypescript > fixed 1`] = `
 "import clsx from 'classnames'
 
     function Component(x: SomeType) {

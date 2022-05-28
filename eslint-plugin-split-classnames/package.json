@@ -8,7 +8,6 @@
     "repository": "remorses/split-classnames",
     "scripts": {
         "build": "tsc",
-        "test": "NODE_ENV=test jest",
         "play": "esno src/cli",
         "watch": "tsc -w"
     },

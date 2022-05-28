@@ -1,5 +1,6 @@
 import { ESLint, RuleTester } from 'eslint'
-import { runRule } from './src/utils'
+import { runRule } from 'eslint-plugin-split-classnames/src/utils'
+import { test, describe, expect } from 'vitest'
 
 const tests = {
     simple: `
