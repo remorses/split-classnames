@@ -24,12 +24,12 @@ function Component() {
 becomes
 
 ```tsx
-import clsx from 'classnames'
+import classNames from 'classnames'
 function Component() {
     return (
         <Fragment>
             <p
-                className={clsx(
+                className={classNames(
                     'block w-full py-2 mt-8 text-sm font-semibold text-center',
                     'text-white bg-gray-900 border border-black rounded-md',
                     'disabled:bg-gray-900 hover:cursor-pointer',

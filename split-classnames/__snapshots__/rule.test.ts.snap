@@ -39,13 +39,13 @@ function Component() {
 `;
 
 exports[`test eslint > simple > fixed 1`] = `
-"import clsx from 'classnames';
+"import classNames from 'classnames';
 
 function Component() {
   return (
     <Fragment>
       <p
-        className={clsx(
+        className={classNames(
           'block w-full py-2 mt-8 text-sm font-semibold text-center',
           'text-white bg-gray-900 border border-black rounded-md',
           'w-[340px] disabled:opacity-60 hover:cursor-pointer',
@@ -77,14 +77,14 @@ function Component() {
 `;
 
 exports[`test eslint > withImports > fixed 1`] = `
-"import clsx from 'classnames';
+"import classNames from 'classnames';
 
 import { Fragment } from 'react';
 function Component() {
   return (
     <Fragment>
       <p
-        className={clsx(
+        className={classNames(
           'block w-full py-2 mt-8 text-sm font-semibold text-center',
           'text-white bg-gray-900 border border-black rounded-md',
           'w-[340px] disabled:opacity-60 hover:cursor-pointer',
@@ -98,13 +98,13 @@ function Component() {
 `;
 
 exports[`test eslint > withManyClassnames > fixed 1`] = `
-"import clsx from 'classnames';
+"import classNames from 'classnames';
 
 function Component() {
   return (
     <Fragment>
       <p
-        className={clsx(
+        className={classNames(
           'block w-full py-2 mt-8 text-sm font-semibold text-center',
           'text-white bg-gray-900 border border-black rounded-md',
           'w-[340px] disabled:opacity-60 hover:cursor-pointer',
@@ -112,7 +112,7 @@ function Component() {
         )}
       />
       <p
-        className={clsx(
+        className={classNames(
           'block w-full py-2 mt-8 text-sm font-semibold text-center',
           'text-white bg-gray-900 border border-black rounded-md',
           'w-[340px] disabled:opacity-60 hover:cursor-pointer',
@@ -126,14 +126,14 @@ function Component() {
 `;
 
 exports[`test eslint > withTemplateLiteral > fixed 1`] = `
-"import clsx from 'classnames';
+"import classNames from 'classnames';
 
 import { Fragment } from 'react';
 function Component() {
   return (
     <Fragment>
       <p
-        className={clsx(
+        className={classNames(
           'color classe foo ',
           true ? 'hello' : 'hi',
           'something py-2 mt-8 text-sm font-semibold text-center',
@@ -147,13 +147,13 @@ function Component() {
 `;
 
 exports[`test eslint > withTypescript > fixed 1`] = `
-"import clsx from 'classnames';
+"import classNames from 'classnames';
 
 function Component(x: SomeType) {
   return (
     <Fragment>
       <p
-        className={clsx(
+        className={classNames(
           'block w-full py-2 mt-8 text-sm font-semibold text-center',
           'text-white bg-gray-900 border border-black rounded-md',
           'w-[340px] disabled:opacity-60 hover:cursor-pointer',

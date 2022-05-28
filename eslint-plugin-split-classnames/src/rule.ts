@@ -2,7 +2,7 @@ import _jscodeshift, { JSCodeshift } from 'jscodeshift'
 
 const j: JSCodeshift = _jscodeshift.withParser('tsx')
 
-const CLASSNAMES_IDENTIFIER_NAME = 'clsx'
+const CLASSNAMES_IDENTIFIER_NAME = 'classNames'
 
 // TODO make a sorter that does not sort based on chars length but instead creates groups, like group for md, lg, base, dark, hover, ...
 function tailwindSort(a: string, b: string) {
@@ -60,8 +60,6 @@ export function splitClassNames(
 }
 
 // TODO you can also use https://github.com/dcastil/tailwind-merge to merge tailwind stuff
-
-// TODO let user choose if always add the clsx call instead of leaving short literals classes
 
 const possibleClassNamesImportNames = new Set([
     'classnames',
