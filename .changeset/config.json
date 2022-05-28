@@ -1,10 +1,11 @@
 {
-  "$schema": "https://unpkg.com/@changesets/config@1.4.0/schema.json",
-  "changelog": "@changesets/cli/changelog",
-  "commit": false,
-  "linked": [],
-  "access": "public",
-  "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": []
+    "$schema": "https://unpkg.com/@changesets/config@2.22.0/schema.json",
+    "changelog": "@changesets/cli/changelog",
+    "commit": false,
+    "linked": [["eslint-plugin-split-classnames", "split-classnames"]],
+    "access": "public",
+    "baseBranch": "main",
+    "updateInternalDependencies": "patch",
+    "onlyUpdatePeerDependentsWhenOutOfRange": true,
+    "ignore": []
 }
