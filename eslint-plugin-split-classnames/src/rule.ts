@@ -121,15 +121,16 @@ export const rule: import('eslint').Rule.RuleModule = {
         let addedImport = false
         function report({
             replaceWith: replaceWith,
+            message = '',
             node,
         }: {
             node: import('ast-types').ASTNode
+            message?: string
             replaceWith?: import('ast-types').ASTNode
         }) {
             context.report({
                 node: node as any,
-                message:
-                    'The className is too long. Use {{ functionName }}() instead.',
+                message: message || 'The className is too long.',
                 data: {
                     functionName: params.functionName || 'clsx',
                 },
@@ -298,12 +299,12 @@ export const rule: import('eslint').Rule.RuleModule = {
 
                     // classnames arguments too long
                     // regroups together classnames literal arguments and splits them in groups of maxClassNameCharacters (reordered using tailwindSort)
+                    const usedClassNameFn =
+                        node?.value?.expression?.callee?.name
                     if (
                         node?.value?.type === 'JSXExpressionContainer' &&
                         node?.value?.expression?.type === 'CallExpression' &&
-                        possibleClassNamesImportNames.has(
-                            node?.value?.expression?.callee?.name,
-                        )
+                        possibleClassNamesImportNames.has(usedClassNameFn)
                     ) {
                         const callExpression = j(node)
                             .find(j.CallExpression)
@@ -324,14 +325,19 @@ export const rule: import('eslint').Rule.RuleModule = {
                         const splitted = splitClassNames(
                             literalParts.join(' '),
                             maxClassNameCharacters,
-                        )?.map((s) => j.literal(s))
+                        )
 
-                        if (splitted) {
+                        const changed =
+                            splitted &&
+                            splitted.some((x, i) => x !== literalParts[i])
+
+                        if (changed) {
                             const newArgs: any[] = [
-                                ...splitted,
+                                ...splitted.map((s) => j.literal(s)),
                                 ...nonLiteralParts,
                             ]
                             report({
+                                message: `The ${usedClassNameFn} arguments are not canonically organized.`,
                                 node: callExpression.node,
                                 replaceWith: j.callExpression(
                                     j.identifier(classNamesImportName),

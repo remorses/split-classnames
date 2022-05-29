@@ -38,6 +38,8 @@ function Component() {
 "
 `;
 
+exports[`test eslint > shouldNotRun > fixed 1`] = `""`;
+
 exports[`test eslint > simple > fixed 1`] = `
 "import classNames from 'classnames';
 
