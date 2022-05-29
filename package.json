@@ -4,9 +4,9 @@
     "scripts": {
         "test": "pnpm -r test",
         "watch": "ultra -r watch",
-        "build": "ultra --build -r build",
+        "build": "pnpm -r build",
         "play": "esno eslint-plugin-split-classnames/src/cli",
-        "release": "pnpm build && changeset publish"
+        "release": "pnpm build && changeset"
     },
     "devDependencies": {
         "@changesets/cli": "^2.22.0",
