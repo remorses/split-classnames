@@ -59,6 +59,23 @@ function Component() {
 "
 `;
 
+exports[`test eslint > regression2 > fixed 1`] = `
+"import cs from 'classnames';
+function Component() {
+  return (
+    <Fragment>
+      <p
+        className={clsx(
+          'tracking-wide text-white space-x-2 justify-center',
+          'items-center font-bold flex-row flex'
+        )}
+      />
+    </Fragment>
+  );
+}
+"
+`;
+
 exports[`test eslint > shouldNotRun > fixed 1`] = `
 "import cs from 'classnames';
 function Component() {

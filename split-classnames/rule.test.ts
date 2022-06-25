@@ -138,6 +138,21 @@ const tests = {
         );
     }
     `,
+    regression2: `
+    import cs from 'classnames';
+    function Component() {
+    return (
+            <Fragment>
+            <p
+                className={clsx(
+                    'flex flex-row justify-center items-center space-x-2 font-bold tracking-wide',
+                    'text-white',
+                )}
+            />
+            </Fragment>
+        );
+    }
+    `,
 }
 
 import prettier from 'prettier'

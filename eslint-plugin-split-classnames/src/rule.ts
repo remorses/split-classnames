@@ -343,8 +343,11 @@ export const rule: import('eslint').Rule.RuleModule = {
                             maxClassNameCharacters,
                         )
 
+                        if (!splitted) {
+                            return
+                        }
                         const changed =
-                            splitted &&
+                            splitted.length !== literalParts.length ||
                             splitted.some((x, i) => {
                                 const diff =
                                     literalParts[i] && x !== literalParts[i]

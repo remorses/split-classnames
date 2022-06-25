@@ -8,6 +8,9 @@ import cac from 'cac'
 
 const cli = cac(require('../package.json').name)
 
+cli.version(require('../package.json').version)
+
+
 const allowedExtensions = ['.ts', '.tsx', '.js', '.jsx']
 
 export async function runCodemod({ glob, opts = {} as Opts, dryRun = false }) {
