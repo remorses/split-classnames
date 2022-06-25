@@ -1,5 +1,11 @@
 # eslint-plugin-split-classnames
 
+## 0.2.0
+
+### Minor Changes
+
+-   Sorting is now deterministic
+
 ## 0.1.1
 
 ### Patch Changes

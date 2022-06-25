@@ -1,5 +1,16 @@
 # split-classnames
 
+## 0.2.0
+
+### Minor Changes
+
+-   Sorting is now deterministic
+
+### Patch Changes
+
+-   Updated dependencies
+    -   eslint-plugin-split-classnames@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes
