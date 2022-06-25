@@ -1,5 +1,11 @@
 # eslint-plugin-split-classnames
 
+## 0.3.0
+
+### Minor Changes
+
+-   Add version in cli
+
 ## 0.2.0
 
 ### Minor Changes
