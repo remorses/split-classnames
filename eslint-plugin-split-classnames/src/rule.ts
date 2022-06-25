@@ -5,25 +5,21 @@ const j: JSCodeshift = _jscodeshift.withParser('tsx')
 const CLASSNAMES_IDENTIFIER_NAME = 'classNames'
 
 // TODO make a sorter that does not sort based on chars length but instead creates groups, like group for md, lg, base, dark, hover, ...
-function tailwindSort(a: string, b: string) {
+function tailwindRank(a: string) {
     // a before b
-    if (b.includes(':')) {
-        return -1
-    }
+    let rank = 0
+
     // a after b
     if (a.includes(':')) {
-        return 1
+        rank += 1
     }
-    // a before b
-    if (b.includes('[')) {
-        return -1
-    }
+
     // a after b
     if (a.includes('[')) {
-        return 1
+        rank += 2
     }
     // keep order
-    return 0
+    return rank
 }
 
 export function splitClassNames(
@@ -37,7 +33,14 @@ export function splitClassNames(
     const classes = className
         .split(/\s+/)
         .filter((name) => name.length > 0)
-        .sort(tailwindSort)
+        .sort((a, b) => {
+            const diff = tailwindRank(a) - tailwindRank(b)
+            if (diff === 0) {
+                return a < b ? 1 : -1
+            }
+            return diff
+        })
+    // console.log(classes)
 
     const classGroups: string[] = []
     let currentSize = 0
@@ -287,10 +290,12 @@ export const rule: import('eslint').Rule.RuleModule = {
                             report({
                                 node: node.value,
 
-                                replaceWith: j.jsxExpressionContainer(
-                                    j.callExpression(
-                                        j.identifier(classNamesImportName),
-                                        cxArguments,
+                                replaceWith: fixArguments(
+                                    j.jsxExpressionContainer(
+                                        j.callExpression(
+                                            j.identifier(classNamesImportName),
+                                            cxArguments,
+                                        ),
                                     ),
                                 ),
                             })
@@ -306,6 +311,17 @@ export const rule: import('eslint').Rule.RuleModule = {
                         node?.value?.expression?.type === 'CallExpression' &&
                         possibleClassNamesImportNames.has(usedClassNameFn)
                     ) {
+                        const replaceWith = fixArguments(node)
+                        if (replaceWith) {
+                            report({
+                                message: `The ${usedClassNameFn} arguments are not canonically organized.`,
+                                node: node.value,
+                                replaceWith,
+                            })
+                        }
+                    }
+
+                    function fixArguments(node) {
                         const callExpression = j(node)
                             .find(j.CallExpression)
                             .get()
@@ -329,21 +345,27 @@ export const rule: import('eslint').Rule.RuleModule = {
 
                         const changed =
                             splitted &&
-                            splitted.some((x, i) => x !== literalParts[i])
+                            splitted.some((x, i) => {
+                                const diff =
+                                    literalParts[i] && x !== literalParts[i]
+                                // if (diff) {
+                                //     console.log(literalParts[i], '-', x)
+                                // }
+                                return diff
+                            })
 
                         if (changed) {
                             const newArgs: any[] = [
                                 ...splitted.map((s) => j.literal(s)),
                                 ...nonLiteralParts,
                             ]
-                            report({
-                                message: `The ${usedClassNameFn} arguments are not canonically organized.`,
-                                node: callExpression.node,
-                                replaceWith: j.callExpression(
+                            const replaceWith = j.jsxExpressionContainer(
+                                j.callExpression(
                                     j.identifier(classNamesImportName),
                                     newArgs,
                                 ),
-                            })
+                            )
+                            return replaceWith
                         }
                     }
                 } catch (e) {

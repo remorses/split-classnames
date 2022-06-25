@@ -9,7 +9,6 @@ const config = {
         ])
         return config
     },
-    
 }
 
 module.exports = withTM(config)

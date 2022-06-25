@@ -8,8 +8,9 @@ function Component() {
     <Fragment>
       <p
         className={cs(
-          'color classe foo something py-2 mt-8 text-sm font-semibold',
-          'text-center text-white something else wow so many',
+          'wow text-white text-sm text-center something',
+          'something so py-2 mt-8 many foo font-semibold else',
+          'color classe',
           true ? 'hello' : 'hi'
         )}
       />
@@ -27,8 +28,8 @@ function Component() {
     <Fragment>
       <p
         className={cs(
-          'color classe foo something py-2 mt-8 text-sm font-semibold',
-          'text-center text-white something else',
+          'text-white text-sm text-center something something',
+          'py-2 mt-8 foo font-semibold else color classe',
           true ? 'hello' : 'hi'
         )}
       />
@@ -38,7 +39,44 @@ function Component() {
 "
 `;
 
-exports[`test eslint > shouldNotRun > fixed 1`] = `""`;
+exports[`test eslint > regression1 > fixed 1`] = `
+"import cs from 'classnames';
+function Component() {
+  return (
+    <Fragment>
+      <p
+        className={cs(
+          'whitespace-pre-wrap text-gray-700 max-w-max',
+          'flex appearance-none hover:underline first:pt-0',
+          'dark:text-gray-100 pt-[1em]',
+          hClasses[level] || '',
+          className
+        )}
+      />
+    </Fragment>
+  );
+}
+"
+`;
+
+exports[`test eslint > shouldNotRun > fixed 1`] = `
+"import cs from 'classnames';
+function Component() {
+  return (
+    <Fragment>
+      <p
+        className={cs(
+          'wow text-white text-sm text-center something',
+          'something so py-2 mt-8 many foo font-semibold else',
+          'color classe',
+          true ? 'hello' : 'hi'
+        )}
+      />
+    </Fragment>
+  );
+}
+"
+`;
 
 exports[`test eslint > simple > fixed 1`] = `
 "import classNames from 'classnames';
@@ -48,10 +86,11 @@ function Component() {
     <Fragment>
       <p
         className={classNames(
-          'block w-full py-2 mt-8 text-sm font-semibold text-center',
-          'text-white bg-gray-900 border border-black rounded-md',
-          'w-[340px] disabled:opacity-60 hover:cursor-pointer',
-          'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]'
+          'w-full text-white text-sm text-center rounded-md',
+          'py-2 mt-8 font-semibold border-black border block',
+          'bg-gray-900 hover:cursor-pointer hover:bg-gray-700',
+          'disabled:opacity-60 disabled:bg-gray-900 w-[340px]',
+          'sm:h-[60em]'
         )}
       />
     </Fragment>
@@ -68,8 +107,8 @@ function Component() {
     <Fragment>
       <p
         className={cs(
-          'color classe foo something py-2 mt-8 text-sm font-semibold',
-          'text-center text-white'
+          'text-white text-sm text-center something py-2',
+          'mt-8 foo font-semibold color classe'
         )}
       />
     </Fragment>
@@ -87,10 +126,11 @@ function Component() {
     <Fragment>
       <p
         className={classNames(
-          'block w-full py-2 mt-8 text-sm font-semibold text-center',
-          'text-white bg-gray-900 border border-black rounded-md',
-          'w-[340px] disabled:opacity-60 hover:cursor-pointer',
-          'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]'
+          'w-full text-white text-sm text-center rounded-md',
+          'py-2 mt-8 font-semibold border-black border block',
+          'bg-gray-900 hover:cursor-pointer hover:bg-gray-700',
+          'disabled:opacity-60 disabled:bg-gray-900 w-[340px]',
+          'sm:h-[60em]'
         )}
       />
     </Fragment>
@@ -107,18 +147,20 @@ function Component() {
     <Fragment>
       <p
         className={classNames(
-          'block w-full py-2 mt-8 text-sm font-semibold text-center',
-          'text-white bg-gray-900 border border-black rounded-md',
-          'w-[340px] disabled:opacity-60 hover:cursor-pointer',
-          'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]'
+          'w-full text-white text-sm text-center rounded-md',
+          'py-2 mt-8 font-semibold border-black border block',
+          'bg-gray-900 hover:cursor-pointer hover:bg-gray-700',
+          'disabled:opacity-60 disabled:bg-gray-900 w-[340px]',
+          'sm:h-[60em]'
         )}
       />
       <p
         className={classNames(
-          'block w-full py-2 mt-8 text-sm font-semibold text-center',
-          'text-white bg-gray-900 border border-black rounded-md',
-          'w-[340px] disabled:opacity-60 hover:cursor-pointer',
-          'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]'
+          'w-full text-white text-sm text-center rounded-md',
+          'py-2 mt-8 font-semibold border-black border block',
+          'bg-gray-900 hover:cursor-pointer hover:bg-gray-700',
+          'disabled:opacity-60 disabled:bg-gray-900 w-[340px]',
+          'sm:h-[60em]'
         )}
       />
     </Fragment>
@@ -136,10 +178,9 @@ function Component() {
     <Fragment>
       <p
         className={classNames(
-          'color classe foo ',
-          true ? 'hello' : 'hi',
-          'something py-2 mt-8 text-sm font-semibold text-center',
-          'text-white'
+          'text-white text-sm text-center something py-2',
+          'mt-8 foo font-semibold color classe',
+          true ? 'hello' : 'hi'
         )}
       />
     </Fragment>
@@ -156,10 +197,11 @@ function Component(x: SomeType) {
     <Fragment>
       <p
         className={classNames(
-          'block w-full py-2 mt-8 text-sm font-semibold text-center',
-          'text-white bg-gray-900 border border-black rounded-md',
-          'w-[340px] disabled:opacity-60 hover:cursor-pointer',
-          'disabled:bg-gray-900 hover:bg-gray-700 sm:h-[60em]'
+          'w-full text-white text-sm text-center rounded-md',
+          'py-2 mt-8 font-semibold border-black border block',
+          'bg-gray-900 hover:cursor-pointer hover:bg-gray-700',
+          'disabled:opacity-60 disabled:bg-gray-900 w-[340px]',
+          'sm:h-[60em]'
         )}
       />
     </Fragment>

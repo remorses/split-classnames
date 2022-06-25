@@ -38,6 +38,7 @@ export async function runRule(code: string, options: Opts = {}) {
     let fixedCode = result[0].source
     let incrementRanges = 0
     for (let message of result[0].messages) {
+        // console.log(message.message)
         if (message.fix) {
             fixedCode = replaceRange(
                 fixedCode,

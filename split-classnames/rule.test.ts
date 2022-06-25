@@ -121,6 +121,23 @@ const tests = {
         );
     }
     `,
+    regression1: `
+    import cs from 'classnames';
+    function Component() {
+    return (
+            <Fragment>
+            <p
+                className={cs(
+                    'appearance-none max-w-max flex whitespace-pre-wrap text-gray-700',
+                    'pt-[1em] hover:underline dark:text-gray-100 first:pt-0',
+                    hClasses[level] || '',
+                    className,
+                )}
+            />
+            </Fragment>
+        );
+    }
+    `,
 }
 
 import prettier from 'prettier'
@@ -131,14 +148,17 @@ describe('test eslint', () => {
             const code = tests[testName]
             // console.log('code', code)
             let fixedCode = await runRule(code)
-            fixedCode =
+            let prettyFixedCode =
                 fixedCode &&
                 prettier.format(fixedCode, {
                     singleQuote: true,
+                    parser: 'babel',
                 })
             // console.log(fixedCode)
 
-            expect(fixedCode).toMatchSnapshot('fixed')
+            expect(prettyFixedCode).toMatchSnapshot('fixed')
+            let fixedCodeAgain = (await runRule(fixedCode)) || fixedCode || code
+            expect(fixedCodeAgain.trim()).toBe(fixedCode.trim())
         })
     }
 })
