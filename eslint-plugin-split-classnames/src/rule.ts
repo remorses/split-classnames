@@ -106,6 +106,9 @@ const meta: import('eslint').Rule.RuleMetaData = {
                 functionName: {
                     type: 'string',
                 },
+                importStatement: {
+                    type: 'string',
+                },
             },
         },
     ],
@@ -114,13 +117,14 @@ const meta: import('eslint').Rule.RuleMetaData = {
 export type Opts = {
     maxClassNameCharacters?: number
     functionName?: string
+    importStatement?: string
 }
 
 export const rule: import('eslint').Rule.RuleModule = {
     meta,
     create(context) {
         const [params = {}] = context.options
-        const { functionName, maxClassNameCharacters = 40 } = params
+        const { functionName, maxClassNameCharacters = 40, importStatement } = params
         let addedImport = false
         function report({
             replaceWith: replaceWith,
@@ -147,9 +151,13 @@ export const rule: import('eslint').Rule.RuleModule = {
                     ) {
                         addedImport = true
 
+                        const importText = importStatement ?
+                            `${importStatement}\n` :
+                            `import ${classNamesImportName} from '${CLASSNAMES_IMPORT_SOURCE}'\n`
+
                         yield fixer.insertTextBeforeRange(
                             [0, 0],
-                            `import ${classNamesImportName} from '${CLASSNAMES_IMPORT_SOURCE}'\n`,
+                            importText,
                         )
                     }
                     if (replaceWith) {
