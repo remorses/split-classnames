@@ -90,3 +90,12 @@ eslint --fix ./src
 -   Works on existing classnames calls (`className={clsx('very long classNames are slitted in groups')}`)
 -   Regroups already existing classnames calls
 -   Sorts the classes for tailwind (variants like `sm:` and `lg:` are put last)
+
+
+## Sponsors
+
+[**Notaku**](https://notaku.website)
+
+
+[![Notaku](https://preview.notaku.website/github_banner.jpg)](https://notaku.website)
+
